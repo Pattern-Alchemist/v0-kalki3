@@ -4,6 +4,7 @@ import { AnimatedBackground } from "@/components/animated-background"
 import { ScrollReveal } from "@/components/scroll-reveal"
 import { GlassCard } from "@/components/glass-card"
 import { ConstellationDivider } from "@/components/constellation-divider"
+import { BackButton } from "@/components/back-button"
 import Link from "next/link"
 import { Calculator, Heart, Moon, Sparkles, Timer, HelpCircle } from "lucide-react"
 
@@ -61,6 +62,10 @@ export default function ToolsPage() {
       <main className="flex-1 relative z-10">
         <section className="py-16 px-4">
           <div className="max-w-6xl mx-auto">
+            <div className="mb-6">
+              <BackButton />
+            </div>
+
             <ScrollReveal>
               <h1 className="text-4xl md:text-5xl font-bold text-center bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
                 Interactive Astrology Tools

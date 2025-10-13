@@ -1,5 +1,9 @@
 import type { Metadata } from "next"
 import { VideoConsultations } from "@/components/consultations/video-consultations"
+import { MainNav } from "@/components/main-nav"
+import { SiteFooter } from "@/components/site-footer"
+import { AnimatedBackground } from "@/components/animated-background"
+import { BackButton } from "@/components/back-button"
 
 export const metadata: Metadata = {
   title: "Video Consultations | AstroKalki",
@@ -8,19 +12,30 @@ export const metadata: Metadata = {
 
 export default function ConsultationsPage() {
   return (
-    <div className="min-h-screen bg-background py-12">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-600 bg-clip-text text-transparent">
-            Video Consultations
-          </h1>
-          <p className="text-center text-muted-foreground mb-12 text-lg">
-            Connect face-to-face with expert astrologers for personalized guidance
-          </p>
+    <div className="min-h-dvh flex flex-col relative">
+      <AnimatedBackground />
+      <MainNav />
 
-          <VideoConsultations />
+      <main className="flex-1 relative z-10 py-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-6">
+              <BackButton />
+            </div>
+
+            <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-600 bg-clip-text text-transparent">
+              Video Consultations
+            </h1>
+            <p className="text-center text-muted-foreground mb-12 text-lg">
+              Connect face-to-face with expert astrologers for personalized guidance
+            </p>
+
+            <VideoConsultations />
+          </div>
         </div>
-      </div>
+      </main>
+
+      <SiteFooter />
     </div>
   )
 }
