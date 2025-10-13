@@ -5,7 +5,6 @@ import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import { CartButton } from "./cart-button"
 import { AuthButton } from "./auth/auth-button"
-import { ThemeToggle } from "./theme-toggle"
 
 export function MainNav() {
   const [open, setOpen] = useState(false)
@@ -19,13 +18,11 @@ export function MainNav() {
             alt="AstroKalki Logo"
             width={240}
             height={80}
-            className="h-14 w-auto transition-transform group-hover:scale-105"
+            className="w-auto transition-transform group-hover:scale-105 h-[85px]"
             priority
           />
         </Link>
-        {/* </CHANGE> */}
         <div className="flex items-center gap-3">
-          <ThemeToggle />
           <AuthButton />
           <CartButton />
           <button

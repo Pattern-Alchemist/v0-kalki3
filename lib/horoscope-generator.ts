@@ -124,3 +124,8 @@ export function generateAllHoroscopes(): HoroscopeReading[] {
   ]
   return signs.map((sign) => generateDailyHoroscope(sign))
 }
+
+export function generateHoroscope(sign: string): string {
+  const reading = generateDailyHoroscope(sign)
+  return reading.description
+}

@@ -23,18 +23,18 @@ const SIGNS = [
 ]
 
 const ICON_MAP: Record<string, string> = {
-  Aries: "/images/zodiac/aries.jpg",
-  Taurus: "/images/zodiac/taurus.jpg",
-  Gemini: "/images/zodiac/gemini.jpg",
-  Cancer: "/images/zodiac/cancer.jpg",
-  Leo: "/images/zodiac/leo.jpg",
-  Virgo: "/images/zodiac/virgo.jpg",
-  Libra: "/images/zodiac/libra.jpg",
-  Scorpio: "/images/zodiac/scorpio.jpg",
-  Sagittarius: "/images/zodiac/sagittarius.jpg",
-  Capricorn: "/images/zodiac/capricorn.jpg",
-  Aquarius: "/images/zodiac/aquarius.jpg",
-  Pisces: "/images/zodiac/pisces.jpg",
+  Aries: "/images/zodiac/aries.png",
+  Taurus: "/images/zodiac/taurus.png",
+  Gemini: "/images/zodiac/gemini.png",
+  Cancer: "/images/zodiac/cancer.png",
+  Leo: "/images/zodiac/leo.png",
+  Virgo: "/images/zodiac/virgo.png",
+  Libra: "/images/zodiac/libra.png",
+  Scorpio: "/images/zodiac/scorpio.png",
+  Sagittarius: "/images/zodiac/sagittarius.png",
+  Capricorn: "/images/zodiac/capricorn.png",
+  Aquarius: "/images/zodiac/aquarius.png",
+  Pisces: "/images/zodiac/pisces.png",
 }
 
 interface HoroscopeData {
@@ -45,34 +45,55 @@ export function HoroscopeGrid() {
   const [horoscopes, setHoroscopes] = useState<HoroscopeData>({})
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchHoroscopes = async () => {
+  const fetchHoroscopes = async () => {
+    try {
+      setLoading(true)
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
+
+      const endpoint = "/api/horoscope"
+      let apiUrl = baseUrl ? `${baseUrl}${endpoint}` : endpoint
+
+      let response: Response
       try {
-        const response = await fetch("/api/horoscope")
-        const result = await response.json()
+        response = await fetch(apiUrl)
 
-        if (result.success && result.data) {
-          const formattedData: HoroscopeData = {}
-          Object.keys(result.data).forEach((key) => {
-            const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1)
-            formattedData[capitalizedKey] = result.data[key]
-          })
-          setHoroscopes(formattedData)
-        } else {
-          throw new Error("Failed to fetch horoscopes")
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
         }
-        setLoading(false)
-      } catch (error) {
-        console.error("[v0] Error fetching horoscopes:", error)
-        const fallback: HoroscopeData = {}
-        SIGNS.forEach((sign) => {
-          fallback[sign] = "Favorable energies guide your day. Focus on communication, balance, and steady progress."
-        })
-        setHoroscopes(fallback)
-        setLoading(false)
-      }
-    }
+      } catch (fetchError) {
+        apiUrl = endpoint
+        response = await fetch(apiUrl)
 
+        if (!response.ok) {
+          throw new Error(`Local API also failed! status: ${response.status}`)
+        }
+      }
+
+      const result = await response.json()
+
+      if (result.success && result.data) {
+        const formattedData: HoroscopeData = {}
+        Object.keys(result.data).forEach((key) => {
+          const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1)
+          formattedData[capitalizedKey] = result.data[key]
+        })
+        setHoroscopes(formattedData)
+      } else {
+        throw new Error("Invalid response format")
+      }
+      setLoading(false)
+    } catch (error) {
+      console.error("Error fetching horoscopes:", error)
+      const fallback: HoroscopeData = {}
+      SIGNS.forEach((sign) => {
+        fallback[sign] = "Favorable energies guide your day. Focus on communication, balance, and steady progress."
+      })
+      setHoroscopes(fallback)
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
     fetchHoroscopes()
   }, [])
 
@@ -100,13 +121,13 @@ export function HoroscopeGrid() {
               <ScrollReveal key={sign} delay={index * 50}>
                 <GlassCard className="p-6 hover:scale-[1.02] transition-transform duration-300">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="relative w-12 h-12 rounded-lg overflow-hidden">
+                    <div className="relative w-16 h-16 rounded-lg overflow-hidden ring-2 ring-cyan-400/20">
                       <Image
                         src={ICON_MAP[sign] || "/placeholder.svg"}
-                        alt={`${sign} icon`}
+                        alt={`${sign} zodiac sign`}
                         fill
                         className="object-cover"
-                        sizes="48px"
+                        sizes="64px"
                       />
                     </div>
                     <h3 className="text-xl font-bold">{sign}</h3>
@@ -117,9 +138,9 @@ export function HoroscopeGrid() {
                   </p>
                   <a
                     href="#services"
-                    className="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors font-medium text-sm"
+                    className="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors font-medium text-sm group"
                   >
-                    Get detailed reading →
+                    Get detailed reading <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
                   </a>
                 </GlassCard>
               </ScrollReveal>

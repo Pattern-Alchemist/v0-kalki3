@@ -53,13 +53,13 @@ export function SiteFooter() {
             <h3 className="text-sm font-semibold text-foreground">Legal</h3>
             <ul className="mt-3 space-y-2 text-sm">
               <li>
-                <Link href="#" className="pointer-events-none text-foreground/50">
-                  Privacy Policy (add)
+                <Link href="/privacy" className="text-foreground/80 hover:text-foreground">
+                  Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="#" className="pointer-events-none text-foreground/50">
-                  Terms of Service (add)
+                <Link href="/terms" className="text-foreground/80 hover:text-foreground">
+                  Terms of Service
                 </Link>
               </li>
             </ul>

@@ -13,10 +13,17 @@ import { NewsletterSignup } from "@/components/newsletter-signup"
 import { BackToTop } from "@/components/back-to-top"
 import { Toaster } from "sonner"
 import { ReviewSection } from "@/components/review-section"
+import { generateOrganizationSchema, generateServiceSchema } from "@/lib/structured-data"
 
 export default function HomePage() {
+  const organizationSchema = generateOrganizationSchema()
+  const serviceSchema = generateServiceSchema()
+
   return (
     <div className="min-h-dvh flex flex-col relative">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
+
       <AnimatedBackground />
 
       <MainNav />
@@ -33,7 +40,6 @@ export default function HomePage() {
         <PricingSection />
 
         <ConstellationDivider />
-        {/* </CHANGE> */}
 
         <Services />
 

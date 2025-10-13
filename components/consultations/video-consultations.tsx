@@ -2,44 +2,22 @@
 
 import { GlassCard } from "@/components/glass-card"
 import { Button } from "@/components/ui/button"
-import { Video, Star, Calendar, Clock } from "lucide-react"
+import { Video, Star, Clock } from "lucide-react"
 
 const astrologers = [
   {
     id: "1",
-    name: "Dr. Sarah Moon",
-    specialty: "Western Astrology & Relationships",
-    experience: "15 years",
-    rating: 4.9,
-    reviews: 342,
-    price: 99,
-    duration: 60,
-    image: "/astrologer-woman.jpg",
-    available: true,
-  },
-  {
-    id: "2",
-    name: "Pandit Raj Kumar",
-    specialty: "Vedic Astrology & Career",
-    experience: "20 years",
+    name: "Kaustubh",
+    specialty: "Intuitive Astrology & Psychic Healing",
+    experience: "9 years",
     rating: 5.0,
-    reviews: 289,
-    price: 129,
+    reviews: 156,
+    price: 5500,
+    currency: "INR",
     duration: 60,
-    image: "/vedic-astrologer.jpg",
+    image: "/images/kaustubh-profile.jpg",
     available: true,
-  },
-  {
-    id: "3",
-    name: "Luna Eclipse",
-    specialty: "Predictive Astrology & Life Path",
-    experience: "12 years",
-    rating: 4.8,
-    reviews: 421,
-    price: 89,
-    duration: 60,
-    image: "/astrologer-luna.jpg",
-    available: false,
+    description: "Life coaching experience",
   },
 ]
 
@@ -64,6 +42,7 @@ export function VideoConsultations() {
             </div>
 
             <p className="text-xs text-muted-foreground">{astrologer.experience} experience</p>
+            {astrologer.description && <p className="text-xs text-muted-foreground mt-1">{astrologer.description}</p>}
           </div>
 
           <div className="space-y-3 mb-4">
@@ -72,25 +51,23 @@ export function VideoConsultations() {
                 <Clock className="h-4 w-4 text-cyan-500" />
                 <span>{astrologer.duration} minutes</span>
               </div>
-              <span className="font-bold text-lg">${astrologer.price}</span>
+              <span className="font-bold text-lg">₹{astrologer.price.toLocaleString("en-IN")}</span>
             </div>
           </div>
 
           <Button
+            asChild
             disabled={!astrologer.available}
             className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700"
           >
-            {astrologer.available ? (
-              <>
-                <Video className="mr-2 h-4 w-4" />
-                Book Session
-              </>
-            ) : (
-              <>
-                <Calendar className="mr-2 h-4 w-4" />
-                Fully Booked
-              </>
-            )}
+            <a
+              href={`https://wa.me/918920862931?text=Hi, I'm interested in booking a ${astrologer.duration}-minute video consultation with ${astrologer.name} (₹${astrologer.price}).`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Video className="mr-2 h-4 w-4" />
+              Book Session
+            </a>
           </Button>
         </GlassCard>
       ))}

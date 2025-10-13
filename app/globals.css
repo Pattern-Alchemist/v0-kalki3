@@ -37,6 +37,11 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Added cosmic theme variables */
+  --cosmic-primary: #06b6d4;
+  --cosmic-secondary: #3b82f6;
+  --cosmic-accent: #8b5cf6;
 }
 
 .dark {
@@ -72,6 +77,25 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+}
+
+/* Added cosmic theme variations */
+[data-cosmic-theme="cosmic-purple"] {
+  --cosmic-primary: #a855f7;
+  --cosmic-secondary: #ec4899;
+  --cosmic-accent: #f472b6;
+}
+
+[data-cosmic-theme="celestial-blue"] {
+  --cosmic-primary: #3b82f6;
+  --cosmic-secondary: #06b6d4;
+  --cosmic-accent: #0ea5e9;
+}
+
+[data-cosmic-theme="mystic-gold"] {
+  --cosmic-primary: #f59e0b;
+  --cosmic-secondary: #f97316;
+  --cosmic-accent: #fb923c;
 }
 
 @theme inline {
@@ -122,4 +146,52 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Added shooting star animation */
+@keyframes shooting {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(300px) translateY(300px) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+.shooting-star {
+  animation: shooting 2s ease-out forwards;
+  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Added smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Added cosmic glow effects */
+.cosmic-glow {
+  box-shadow: 0 0 20px var(--cosmic-primary), 0 0 40px var(--cosmic-secondary);
+}
+
+.cosmic-text-glow {
+  text-shadow: 0 0 10px var(--cosmic-primary), 0 0 20px var(--cosmic-secondary);
+}
+
+/* Added pulsating glow animation for futuristic text effect */
+@keyframes pulse-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 10px var(--cosmic-primary), 0 0 20px var(--cosmic-secondary), 0 0 30px var(--cosmic-accent);
+    opacity: 1;
+  }
+  50% {
+    text-shadow: 0 0 20px var(--cosmic-primary), 0 0 40px var(--cosmic-secondary), 0 0 60px var(--cosmic-accent);
+    opacity: 0.9;
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
 }

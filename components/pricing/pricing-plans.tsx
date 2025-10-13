@@ -2,9 +2,16 @@
 
 import { GlassCard } from "@/components/glass-card"
 import { Button } from "@/components/ui/button"
-import { Check, Zap, Sparkles, Star, Crown, Gem, Flame } from "lucide-react"
-import { BookingModal } from "./booking-modal"
-import { useState } from "react"
+import { Check } from "lucide-react"
+import Image from "next/image"
+import {
+  FlashIcon,
+  CosmicCodeIcon,
+  SilverMoonIcon,
+  GoldCrownIcon,
+  PlatinumGemIcon,
+  EliteFlameIcon,
+} from "@/components/icons/pricing-icons"
 
 const plans = [
   {
@@ -13,7 +20,7 @@ const plans = [
     subtitle: "Quick Insight",
     price: 100,
     currency: "₹",
-    icon: Zap,
+    icon: FlashIcon,
     description: "A bite-sized reading for instant clarity. Perfect when you're at a crossroads.",
     features: [
       "1 Specific Question (Career, Love, Money, Health)",
@@ -29,7 +36,7 @@ const plans = [
     subtitle: "Astrology + Numerology + Palmistry",
     price: 777,
     currency: "₹",
-    icon: Sparkles,
+    icon: CosmicCodeIcon,
     description: "Reveal the numbers shaping your destiny & current life chapter.",
     features: [
       "Life Path + Future events",
@@ -47,7 +54,7 @@ const plans = [
     subtitle: "Focused Guidance",
     price: 1500,
     currency: "₹",
-    icon: Star,
+    icon: SilverMoonIcon,
     description: "Your go-to mini-session when you need personalized insight on multiple topics.",
     features: [
       "Up to 3 Questions covered in depth",
@@ -64,7 +71,7 @@ const plans = [
     subtitle: "Karma + Chart + Transit",
     price: 4500,
     currency: "₹",
-    icon: Crown,
+    icon: GoldCrownIcon,
     description: "Your chart decoded with real-time planetary guidance for Karmic analysis.",
     features: [
       "Past (Last year's), Present and Future Predictions",
@@ -83,7 +90,7 @@ const plans = [
     subtitle: "Deep-Dive Transformation",
     price: 8888,
     currency: "₹",
-    icon: Gem,
+    icon: PlatinumGemIcon,
     description: "A structured, high-touch experience to reset and realign your entire path.",
     features: [
       "Full Chart + 12–18 Month Future Roadmap",
@@ -102,7 +109,7 @@ const plans = [
     subtitle: "DHARMA Mentorship",
     price: 21000,
     currency: "₹",
-    icon: Flame,
+    icon: EliteFlameIcon,
     description: "Your personal cosmic blueprint, turned into an actionable journey.",
     features: [
       "Become a part of Kalki's Sena (Community)",
@@ -122,18 +129,11 @@ const plans = [
 ]
 
 export function PricingPlans() {
-  const [selectedPlan, setSelectedPlan] = useState<{
-    name: string
-    price: string
-    description: string
-  } | null>(null)
-
   const handleBookNow = (plan: (typeof plans)[0]) => {
-    setSelectedPlan({
-      name: plan.name,
-      price: `${plan.currency}${plan.price.toLocaleString()}`,
-      description: plan.description,
-    })
+    const message = encodeURIComponent(
+      `Hi, I'm interested in the ${plan.name} package (${plan.currency}${plan.price.toLocaleString()}).`,
+    )
+    window.open(`https://wa.me/918920862931?text=${message}`, "_blank")
   }
 
   return (
@@ -144,50 +144,62 @@ export function PricingPlans() {
             const Icon = plan.icon
 
             return (
-              <GlassCard
-                key={plan.id}
-                className={`p-6 relative hover:scale-[1.02] transition-transform duration-300 ${
-                  plan.popular ? "ring-2 ring-purple-500 shadow-lg shadow-purple-500/20" : ""
-                }`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                    MOST POPULAR
-                  </div>
-                )}
-
-                <div className="text-center mb-6">
-                  <div className={`inline-flex p-3 rounded-full bg-gradient-to-r ${plan.gradient} mb-4`}>
-                    <Icon className="h-8 w-8 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-1">{plan.name}</h3>
-                  <p className="text-sm text-cyan-400 mb-3">{plan.subtitle}</p>
-                  <p className="text-xs text-muted-foreground mb-4 leading-relaxed">{plan.description}</p>
-
-                  <div className="mb-2">
-                    <span className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-                      {plan.currency}
-                      {plan.price.toLocaleString()}
-                    </span>
-                  </div>
+              <div key={plan.id} className="relative group">
+                {/* Cosmic frame background */}
+                <div className="absolute inset-0 opacity-30 group-hover:opacity-50 transition-opacity duration-300 rounded-lg overflow-hidden">
+                  <Image
+                    src="/images/cosmic-frame.jpeg"
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
                 </div>
 
-                <ul className="space-y-2.5 mb-6 min-h-[200px]">
-                  {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-2 text-sm">
-                      <Check className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-muted-foreground leading-relaxed">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Button
-                  onClick={() => handleBookNow(plan)}
-                  className={`w-full bg-gradient-to-r ${plan.gradient} hover:opacity-90 text-white font-semibold`}
+                <GlassCard
+                  className={`p-6 relative hover:scale-[1.02] transition-transform duration-300 backdrop-blur-xl bg-background/95 ${
+                    plan.popular ? "ring-2 ring-purple-500 shadow-lg shadow-purple-500/20" : ""
+                  }`}
                 >
-                  Book Now →
-                </Button>
-              </GlassCard>
+                  {plan.popular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                      MOST POPULAR
+                    </div>
+                  )}
+
+                  <div className="text-center mb-6">
+                    <div className={`inline-flex p-3 rounded-full bg-gradient-to-r ${plan.gradient} mb-4`}>
+                      <Icon className="h-10 w-10 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-1 text-foreground">{plan.name}</h3>
+                    <p className="text-sm text-cyan-400 font-semibold mb-3">{plan.subtitle}</p>
+                    <p className="text-xs text-foreground/80 mb-4 leading-relaxed">{plan.description}</p>
+
+                    <div className="mb-2">
+                      <span className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+                        {plan.currency}
+                        {plan.price.toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  <ul className="space-y-2.5 mb-6 min-h-[200px]">
+                    {plan.features.map((feature, index) => (
+                      <li key={index} className="flex items-start gap-2 text-sm">
+                        <Check className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-foreground/90 leading-relaxed">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Button
+                    onClick={() => handleBookNow(plan)}
+                    className={`w-full bg-gradient-to-r ${plan.gradient} hover:opacity-90 text-white font-semibold`}
+                  >
+                    Book Now →
+                  </Button>
+                </GlassCard>
+              </div>
             )
           })}
         </div>
@@ -201,10 +213,6 @@ export function PricingPlans() {
           </p>
         </div>
       </div>
-
-      {selectedPlan && (
-        <BookingModal isOpen={!!selectedPlan} onClose={() => setSelectedPlan(null)} plan={selectedPlan} />
-      )}
     </>
   )
 }
