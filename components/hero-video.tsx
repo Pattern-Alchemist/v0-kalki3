@@ -1,10 +1,16 @@
+"use client"
+
+import { useState } from "react"
 import { ScrollReveal } from "./scroll-reveal"
 import Image from "next/image"
 import { Constellation } from "./icons/cosmic-icons"
 import { PlanetaryOrbit } from "./planetary-orbit"
 import { ParallaxSection } from "./parallax-section"
+import { BookingModal } from "./booking-modal"
 
 export function HeroVideo() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   return (
     <section id="main-content" className="hero-futuristic hero-minimal relative overflow-hidden">
       <PlanetaryOrbit />
@@ -74,15 +80,17 @@ export function HeroVideo() {
 
         <ScrollReveal delay={0.4}>
           <div className="mt-10 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-400">
-            <a
-              href="#horoscope"
+            <button
+              onClick={() => setIsModalOpen(true)}
               className="cta-button relative z-20 inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/50 hover:shadow-xl hover:shadow-cyan-500/60 transition-all hover:scale-105 active:scale-95 border cosmic-glow border-foreground"
             >
               {"Let's Begin"}
-            </a>
+            </button>
           </div>
         </ScrollReveal>
       </div>
+
+      <BookingModal open={isModalOpen} onOpenChange={setIsModalOpen} serviceName="General Consultation" />
     </section>
   )
 }

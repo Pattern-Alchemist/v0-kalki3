@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { GlassCard } from "@/components/glass-card"
 import { Button } from "@/components/ui/button"
 import { Check } from "lucide-react"
@@ -12,6 +13,7 @@ import {
   PlatinumGemIcon,
   EliteFlameIcon,
 } from "@/components/icons/pricing-icons"
+import { BookingModal } from "@/components/booking-modal"
 
 const plans = [
   {
@@ -129,11 +131,12 @@ const plans = [
 ]
 
 export function PricingPlans() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedPlan, setSelectedPlan] = useState<(typeof plans)[0] | null>(null)
+
   const handleBookNow = (plan: (typeof plans)[0]) => {
-    const message = encodeURIComponent(
-      `Hi, I'm interested in the ${plan.name} package (${plan.currency}${plan.price.toLocaleString()}).`,
-    )
-    window.open(`https://wa.me/918920862931?text=${message}`, "_blank")
+    setSelectedPlan(plan)
+    setIsModalOpen(true)
   }
 
   return (
@@ -213,6 +216,15 @@ export function PricingPlans() {
           </p>
         </div>
       </div>
+
+      {selectedPlan && (
+        <BookingModal
+          open={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          serviceName={selectedPlan.name}
+          servicePrice={`${selectedPlan.currency}${selectedPlan.price.toLocaleString()}`}
+        />
+      )}
     </>
   )
 }

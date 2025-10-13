@@ -1,10 +1,17 @@
+"use client"
+
+import { useState } from "react"
 import { ScrollReveal } from "./scroll-reveal"
 import { GlassCard } from "./glass-card"
 import Image from "next/image"
 import { StarAccent } from "./icons/cosmic-icons"
 import { ParallaxSection } from "./parallax-section"
+import { BookingModal } from "./booking-modal"
 
 export function Services() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedService, setSelectedService] = useState("")
+
   const services = [
     {
       title: "Personal Consultation",
@@ -27,6 +34,12 @@ export function Services() {
       image: "/images/services/career.jpg",
     },
   ]
+
+  const handleBookNow = (serviceTitle: string) => {
+    setSelectedService(serviceTitle)
+    setIsModalOpen(true)
+  }
+
   return (
     <section id="services" className="bg-background/50 relative overflow-hidden">
       <ParallaxSection speed={0.2} className="absolute top-20 right-10 opacity-10">
@@ -58,19 +71,19 @@ export function Services() {
                 </div>
                 <h3 className="mt-3 font-semibold">{s.title}</h3>
                 <p className="text-sm text-muted-foreground mt-1 flex-1">{s.desc}</p>
-                <a
-                  href={`https://wa.me/918920862931?text=Hi, I'm interested in booking ${s.title}.`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={() => handleBookNow(s.title)}
                   className="mt-3 inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors group"
                 >
                   Book now <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
-                </a>
+                </button>
               </GlassCard>
             </ScrollReveal>
           ))}
         </div>
       </div>
+
+      <BookingModal open={isModalOpen} onOpenChange={setIsModalOpen} serviceName={selectedService} />
     </section>
   )
 }
