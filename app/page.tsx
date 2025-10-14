@@ -14,6 +14,7 @@ import { BackToTop } from "@/components/back-to-top"
 import { Toaster } from "sonner"
 import { ReviewSection } from "@/components/review-section"
 import { generateOrganizationSchema, generateServiceSchema } from "@/lib/structured-data"
+import { VideoSection } from "@/components/video-section"
 
 export default function HomePage() {
   const organizationSchema = generateOrganizationSchema()
@@ -35,6 +36,8 @@ export default function HomePage() {
 
         <HoroscopeGrid />
 
+        <VideoSection videoUrl="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Generated%20video%201%20%282%29-0go5Nv4hAAaADJrrdOrpH5dkRyGCsv.mp4" />
+
         <ConstellationDivider />
 
         <PricingSection />
@@ -43,13 +46,19 @@ export default function HomePage() {
 
         <Services />
 
+        <VideoSection videoUrl="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Generated%20File%20October%2007%2C%202025%20-%2010_56AM%20%281%29-Z0ebL8dcEWSObmAGG7wxGRLOdpqS9N.mp4" />
+
         <ConstellationDivider />
 
         <Products />
 
+        <VideoSection videoUrl="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Generated%20video%202-yz34nm1LJwdyFElrlxc6q9vOx8mFZl.mp4" />
+
         <ConstellationDivider />
 
         <BlogArticles />
+
+        <VideoSection videoUrl="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Generated%20File%20October%2007%2C%202025%20-%2010_56AM-ue1uaiXNbMktayI16y4yzvs9BeDOQB.mp4" />
 
         <ConstellationDivider />
 
