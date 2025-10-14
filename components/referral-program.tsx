@@ -24,7 +24,7 @@ export function ReferralProgram() {
     setTimeout(() => setCopied(false), 2000)
     toast({
       title: "Link Copied",
-      description: "Share this link to earn $10 for each friend who signs up",
+      description: "Share this link to earn ₹100 for each friend who signs up",
     })
   }
 
@@ -36,10 +36,10 @@ export function ReferralProgram() {
             <Gift className="h-8 w-8 text-white" />
           </div>
           <div className="flex-1">
-            <h2 className="text-2xl font-bold mb-2">Give $10, Get $10</h2>
+            <h2 className="text-2xl font-bold mb-2">Give ₹100, Get ₹100</h2>
             <p className="text-muted-foreground mb-4">
-              Invite your friends to AstroKalki. They get $10 off their first purchase, and you earn $10 credit for each
-              successful referral.
+              Invite your friends to AstroKalki. They get ₹100 off their first purchase, and you earn ₹100 credit for
+              each successful referral.
             </p>
 
             <div className="flex gap-2">
@@ -77,7 +77,7 @@ export function ReferralProgram() {
           <div className="flex items-center gap-3">
             <Gift className="h-8 w-8 text-green-500" />
             <div>
-              <p className="text-2xl font-bold">${stats.earned}</p>
+              <p className="text-2xl font-bold">₹{stats.earned}</p>
               <p className="text-sm text-muted-foreground">Earned</p>
             </div>
           </div>
@@ -87,7 +87,7 @@ export function ReferralProgram() {
           <div className="flex items-center gap-3">
             <Gift className="h-8 w-8 text-yellow-500" />
             <div>
-              <p className="text-2xl font-bold">${stats.pending}</p>
+              <p className="text-2xl font-bold">₹{stats.pending}</p>
               <p className="text-sm text-muted-foreground">Pending</p>
             </div>
           </div>

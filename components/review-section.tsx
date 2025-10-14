@@ -19,7 +19,7 @@ interface Review {
 const MOCK_REVIEWS: Review[] = [
   {
     id: "1",
-    author: "Sarah M.",
+    author: "Arpit D.",
     rating: 5,
     content:
       "The birth chart reading was incredibly insightful! AstroKalki helped me understand patterns in my life I never noticed before.",
@@ -27,14 +27,14 @@ const MOCK_REVIEWS: Review[] = [
   },
   {
     id: "2",
-    author: "Michael R.",
+    author: "Harkeerat K.",
     rating: 5,
     content: "Professional, accurate, and compassionate. The consultation exceeded my expectations in every way.",
     date: "1 month ago",
   },
   {
     id: "3",
-    author: "Emma L.",
+    author: "Shivam K.",
     rating: 4,
     content:
       "Great experience overall. The gemstone recommendations were spot on and I've noticed positive changes since wearing them.",

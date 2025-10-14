@@ -54,7 +54,7 @@ export function CartView() {
                     />
                     <div className="flex-1">
                       <h3 className="font-semibold mb-2">{item.title}</h3>
-                      <p className="text-cyan-400 font-bold">${item.price}</p>
+                      <p className="text-cyan-400 font-bold">₹{item.price}</p>
                       <div className="flex items-center gap-2 mt-3">
                         <Button
                           size="icon-sm"
@@ -94,15 +94,15 @@ export function CartView() {
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between">
                     <span>Subtotal</span>
-                    <span>${total().toFixed(2)}</span>
+                    <span>₹{total().toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Shipping</span>
-                    <span>$5.00</span>
+                    <span>₹50</span>
                   </div>
                   <div className="border-t pt-2 flex justify-between font-bold text-lg">
                     <span>Total</span>
-                    <span className="text-cyan-400">${(total() + 5).toFixed(2)}</span>
+                    <span className="text-cyan-400">₹{(total() + 50).toFixed(2)}</span>
                   </div>
                 </div>
                 <Link href="/checkout">

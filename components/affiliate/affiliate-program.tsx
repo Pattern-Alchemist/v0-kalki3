@@ -57,7 +57,7 @@ export function AffiliateProgram() {
               <DollarSign className="h-5 w-5 text-purple-500" />
               <span className="text-sm text-muted-foreground">Total Earned</span>
             </div>
-            <p className="text-3xl font-bold">${stats.earnings}</p>
+            <p className="text-3xl font-bold">₹{stats.earnings}</p>
           </div>
 
           <div className="bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-lg p-4">
@@ -65,7 +65,7 @@ export function AffiliateProgram() {
               <DollarSign className="h-5 w-5 text-yellow-500" />
               <span className="text-sm text-muted-foreground">Pending</span>
             </div>
-            <p className="text-3xl font-bold">${stats.pending}</p>
+            <p className="text-3xl font-bold">₹{stats.pending}</p>
           </div>
         </div>
 
@@ -145,7 +145,7 @@ export function AffiliateProgram() {
 
       <GlassCard className="p-6 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-green-500/20">
         <h2 className="text-2xl font-semibold mb-2">Ready to Withdraw?</h2>
-        <p className="text-muted-foreground mb-4">You have ${stats.earnings} available for withdrawal (minimum $50)</p>
+        <p className="text-muted-foreground mb-4">You have ₹{stats.earnings} available for withdrawal (minimum ₹500)</p>
         <Button className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700">
           <DollarSign className="mr-2 h-4 w-4" />
           Request Payout

@@ -101,6 +101,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={`dark ${geistSans.variable} ${geistMono.variable}`}>
       <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17651268637"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-17651268637');
+            `,
+          }}
+        />
         <link rel="icon" href="/images/favicon.png" sizes="32x32" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -122,7 +133,10 @@ export default function RootLayout({
               description: "Sacred insight meets sharp execution. Personalized astrology readings and cosmic wisdom.",
               url: "https://astrokalki.com",
               logo: "https://astrokalki.com/images/logo_1.jpg",
-              sameAs: ["https://twitter.com/astrokalki", "https://instagram.com/astrokalki"],
+              sameAs: [
+                "https://twitter.com/astrokalki",
+                "https://www.instagram.com/astrokalki_?igsh=MW9lc2ZsNXh3ZTdhdQ==",
+              ],
             }),
           }}
         />

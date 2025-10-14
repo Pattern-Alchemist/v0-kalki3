@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Constellation } from "./icons/cosmic-icons"
+import { Instagram } from "lucide-react"
 
 export function SiteFooter() {
   return (
@@ -26,6 +27,17 @@ export function SiteFooter() {
             <p className="text-sm text-foreground/70">
               Blending sacred insight with sharp execution. Your cosmic journey starts here.
             </p>
+            <div className="flex gap-3 pt-2">
+              <a
+                href="https://www.instagram.com/astrokalki_?igsh=MW9lc2ZsNXh3ZTdhdQ=="
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-foreground/60 hover:text-foreground transition-colors"
+                aria-label="Follow us on Instagram"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+            </div>
           </div>
 
           <div>

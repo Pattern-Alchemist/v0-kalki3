@@ -38,7 +38,11 @@ export function generateOrganizationSchema(baseUrl = "https://astrokalki.com") {
     description: "Sacred insight meets sharp execution. Personalized astrology readings and cosmic wisdom.",
     url: baseUrl,
     logo: `${baseUrl}/images/logo.jpeg`,
-    sameAs: ["https://twitter.com/astrokalki", "https://instagram.com/astrokalki", "https://facebook.com/astrokalki"],
+    sameAs: [
+      "https://twitter.com/astrokalki",
+      "https://www.instagram.com/astrokalki_?igsh=MW9lc2ZsNXh3ZTdhdQ==",
+      "https://facebook.com/astrokalki",
+    ],
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "Customer Service",
