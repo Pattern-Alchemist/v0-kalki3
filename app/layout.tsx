@@ -8,6 +8,7 @@ import { SkipLink } from "@/components/accessibility-skip-link"
 import { CookieConsent } from "@/components/cookie-consent"
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt"
 import { OfflineIndicator } from "@/components/offline-indicator"
+import { FlashQCTA } from "@/components/flash-q-cta"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -130,6 +131,7 @@ export default function RootLayout({
         <SkipLink />
         <OfflineIndicator />
         <Suspense fallback={null}>{children}</Suspense>
+        <FlashQCTA />
         <PWAInstallPrompt />
         <CookieConsent />
         <Analytics />

@@ -15,10 +15,10 @@ export function Products() {
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore()
 
   const products = [
-    { id: "1", title: "Gemstone Kit", price: 39, image: "/images/products/gemstone-kit.jpg" },
-    { id: "2", title: "Incense Bundle", price: 19, image: "/images/products/incense-bundle.jpg" },
-    { id: "3", title: "Astrology Journal", price: 24, image: "/images/products/astrology-journal.jpg" },
-    { id: "4", title: "Tarot Deck", price: 49, image: "/images/products/tarot-deck.jpg" },
+    { id: "1", title: "Gemstone Kit", price: 3999, image: "/images/products/gemstone-kit.jpg" },
+    { id: "2", title: "Incense Bundle", price: 999, image: "/images/products/incense-bundle.jpg" },
+    { id: "3", title: "Astrology Journal", price: 1999, image: "/images/products/astrology-journal.jpg" },
+    { id: "4", title: "Tarot Deck", price: 2550, image: "/images/products/tarot-deck.jpg" },
   ]
 
   const handleAddToCart = (product: (typeof products)[0]) => {
@@ -74,7 +74,7 @@ export function Products() {
                 </div>
                 <div className="mt-3 flex items-center justify-between flex-1">
                   <h3 className="font-semibold">{p.title}</h3>
-                  <span className="text-sm font-bold text-cyan-400">${p.price}</span>
+                  <span className="text-sm font-bold text-cyan-400">₹{p.price.toLocaleString()}</span>
                 </div>
                 <Button onClick={() => handleAddToCart(p)} className="mt-3 w-full gap-2">
                   <ShoppingCart className="h-4 w-4" />

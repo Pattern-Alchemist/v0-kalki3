@@ -130,32 +130,25 @@ Email: ${formData.email}`
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="city">
-                City <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="city"
-                required
-                value={formData.city}
-                onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                placeholder="City"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="state">
-                State <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="state"
-                required
-                value={formData.state}
-                onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                placeholder="State"
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="cityState">
+              City/State <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="cityState"
+              required
+              value={`${formData.city}${formData.city && formData.state ? ", " : ""}${formData.state}`}
+              onChange={(e) => {
+                const value = e.target.value
+                const parts = value.split(",").map((p) => p.trim())
+                setFormData({
+                  ...formData,
+                  city: parts[0] || "",
+                  state: parts[1] || "",
+                })
+              }}
+              placeholder="e.g., Mumbai, Maharashtra"
+            />
           </div>
 
           <div className="space-y-2">

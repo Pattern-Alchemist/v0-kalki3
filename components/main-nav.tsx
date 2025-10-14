@@ -53,6 +53,14 @@ export function MainNav() {
             <li>
               <Link
                 className="text-sm font-medium hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
+                href="/resources"
+              >
+                Resources
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="text-sm font-medium hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
                 href="/pricing"
               >
                 Pricing
@@ -104,6 +112,15 @@ export function MainNav() {
                 className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
               >
                 Tools
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/resources"
+                onClick={() => setOpen(false)}
+                className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
+              >
+                Resources
               </Link>
             </li>
             <li>

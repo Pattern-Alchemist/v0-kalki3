@@ -30,35 +30,35 @@ export function HeroVideo() {
 
       <div className="max-w-5xl mx-auto px-4 py-16 md:py-24 text-center relative z-10">
         <ScrollReveal>
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-8">
             <Image
               src="/images/banner.jpeg"
               alt="AstroKalki - Decoding Kaalchakra"
               width={1000}
               height={300}
-              className="w-full max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-700 leading-3 h-[200px]"
+              className="w-full max-w-4xl animate-in fade-in slide-in-from-bottom-4 duration-700 object-contain"
               priority
             />
           </div>
         </ScrollReveal>
 
         <ScrollReveal delay={0.1}>
-          <p className="hero-tagline mt-4 text-xl flex items-center justify-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100 leading-9 text-foreground md:text-5xl font-sans tracking-wider uppercase cosmic-text-glow pulse-glow">
+          <p className="hero-tagline mt-6 mb-8 text-xl flex items-center justify-center gap-2 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-100 leading-9 text-foreground md:text-5xl font-sans tracking-wider uppercase cosmic-text-glow pulse-glow">
             Decoding Kaalchakra
           </p>
         </ScrollReveal>
 
         <ScrollReveal delay={0.2}>
-          <div className="hero-video-container relative mt-12 md:mt-16 animate-in fade-in zoom-in-95 duration-700 delay-200">
+          <div className="hero-video-container relative mt-12 mb-8 md:mt-16 md:mb-10 animate-in fade-in zoom-in-95 duration-700 delay-200">
             <div
-              className="overlay-badge absolute -top-8 md:-top-10 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 backdrop-blur-xl border border-cyan-500/30 shadow-lg shadow-cyan-500/20 font-medium text-2xl tracking-wide leading-5"
+              className="overlay-badge absolute -top-8 md:-top-10 left-1/2 -translate-x-1/2 px-8 py-3 rounded-full bg-gradient-to-r from-cyan-500/30 to-purple-500/30 backdrop-blur-xl border-2 border-cyan-400/50 shadow-2xl shadow-cyan-500/40 font-bold text-3xl md:text-4xl tracking-widest leading-5 cosmic-text-glow"
               aria-hidden="true"
             >
-              {"PORTAL to 5th DIMENSION"}
+              ENTER 5-D
             </div>
             <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-cyan-500/20 ring-1 ring-cyan-500/20">
               <video
-                className="w-full"
+                className="w-full aspect-video"
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/hero_home-rSbYiyl9nmq5PP3qDgBp9H0KbI9c26.mp4"
                 autoPlay
                 muted
