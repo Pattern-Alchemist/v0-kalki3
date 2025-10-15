@@ -199,7 +199,7 @@ export function PricingPlans() {
                     onClick={() => handleBookNow(plan)}
                     className={`w-full bg-gradient-to-r ${plan.gradient} hover:opacity-90 text-white font-semibold`}
                   >
-                    Book Now →
+                    {plan.id === "flash-q" ? "Get Quick Insight →" : "Begin Your Transformation →"}
                   </Button>
                 </GlassCard>
               </div>

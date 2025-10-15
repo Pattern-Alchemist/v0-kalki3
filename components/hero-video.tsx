@@ -7,6 +7,9 @@ import { Constellation } from "./icons/cosmic-icons"
 import { PlanetaryOrbit } from "./planetary-orbit"
 import { ParallaxSection } from "./parallax-section"
 import { BookingModal } from "./booking-modal"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { HelpCircle } from "lucide-react"
+import Link from "next/link"
 
 export function HeroVideo() {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -50,11 +53,26 @@ export function HeroVideo() {
 
         <ScrollReveal delay={0.2}>
           <div className="hero-video-container relative mt-12 mb-8 md:mt-16 md:mb-10 animate-in fade-in zoom-in-95 duration-700 delay-200">
-            <div
-              className="overlay-badge absolute -top-8 md:-top-10 left-1/2 -translate-x-1/2 px-8 py-3 rounded-full bg-gradient-to-r from-cyan-500/30 to-purple-500/30 backdrop-blur-xl border-2 border-cyan-400/50 shadow-2xl shadow-cyan-500/40 font-bold text-3xl md:text-4xl tracking-widest leading-5 cosmic-text-glow"
-              aria-hidden="true"
-            >
-              ENTER 5-D
+            <div className="overlay-badge absolute -top-8 md:-top-10 left-1/2 -translate-x-1/2 px-8 py-3 rounded-full bg-gradient-to-r from-cyan-500/30 to-purple-500/30 backdrop-blur-xl border-2 border-cyan-400/50 shadow-2xl shadow-cyan-500/40 font-bold text-2xl md:text-3xl tracking-widest leading-5 cosmic-text-glow flex items-center gap-2">
+              <span>UNLOCK 5D GUIDANCE</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      className="inline-flex items-center justify-center"
+                      aria-label="Learn more about 5D Guidance"
+                    >
+                      <HelpCircle className="h-5 w-5 text-cyan-300" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p className="text-sm">
+                      5D Guidance transcends traditional astrology, integrating cosmic wisdom with your soul's journey
+                      for profound transformation and clarity.
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
             <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-cyan-500/20 ring-1 ring-cyan-500/20">
               <video
@@ -76,6 +94,12 @@ export function HeroVideo() {
           <p className="hero-below mt-8 md:mt-10 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
             AstroKalki blends sacred insight with sharp execution
           </p>
+          <Link
+            href="/about"
+            className="inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors text-sm mt-2 group"
+          >
+            How it works? <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+          </Link>
         </ScrollReveal>
 
         <ScrollReveal delay={0.4}>
@@ -84,7 +108,7 @@ export function HeroVideo() {
               onClick={() => setIsModalOpen(true)}
               className="cta-button relative z-20 inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/50 hover:shadow-xl hover:shadow-cyan-500/60 transition-all hover:scale-105 active:scale-95 border cosmic-glow border-foreground"
             >
-              {"Let's Begin"}
+              Begin Your Cosmic Journey
             </button>
           </div>
         </ScrollReveal>

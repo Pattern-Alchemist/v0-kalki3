@@ -41,20 +41,25 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-foreground">Links</h3>
+            <h3 className="text-sm font-semibold text-foreground">Quick Links</h3>
             <ul className="mt-3 space-y-2 text-sm">
               <li>
-                <Link href="/" className="text-foreground/80 hover:text-foreground">
+                <Link href="/" className="text-foreground/80 hover:text-foreground transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-foreground/80 hover:text-foreground">
-                  About
+                <Link href="/about" className="text-foreground/80 hover:text-foreground transition-colors">
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-foreground/80 hover:text-foreground">
+                <Link href="/get-started" className="text-foreground/80 hover:text-foreground transition-colors">
+                  Get Started
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-foreground/80 hover:text-foreground transition-colors">
                   Contact
                 </Link>
               </li>
@@ -65,12 +70,12 @@ export function SiteFooter() {
             <h3 className="text-sm font-semibold text-foreground">Legal</h3>
             <ul className="mt-3 space-y-2 text-sm">
               <li>
-                <Link href="/privacy" className="text-foreground/80 hover:text-foreground">
+                <Link href="/privacy" className="text-foreground/80 hover:text-foreground transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-foreground/80 hover:text-foreground">
+                <Link href="/terms" className="text-foreground/80 hover:text-foreground transition-colors">
                   Terms of Service
                 </Link>
               </li>
@@ -78,8 +83,10 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-8 text-xs text-foreground/60">
-          © {new Date().getFullYear()} AstroKalki. All rights reserved.
+        <div className="mt-8 pt-6 border-t border-foreground/10 text-center">
+          <p className="text-xs text-foreground/60">
+            © {new Date().getFullYear()} AstroKalki. All rights reserved. Decoding Kaalchakra.
+          </p>
         </div>
       </div>
     </footer>

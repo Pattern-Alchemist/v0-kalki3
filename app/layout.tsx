@@ -9,6 +9,7 @@ import { CookieConsent } from "@/components/cookie-consent"
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt"
 import { OfflineIndicator } from "@/components/offline-indicator"
 import { FlashQCTA } from "@/components/flash-q-cta"
+import { WhatsAppWidget } from "@/components/whatsapp-widget"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -145,6 +146,7 @@ export default function RootLayout({
         <SkipLink />
         <OfflineIndicator />
         <Suspense fallback={null}>{children}</Suspense>
+        <WhatsAppWidget />
         <FlashQCTA />
         <PWAInstallPrompt />
         <CookieConsent />

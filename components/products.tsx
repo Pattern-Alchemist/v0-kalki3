@@ -78,7 +78,7 @@ export function Products() {
                 </div>
                 <Button onClick={() => handleAddToCart(p)} className="mt-3 w-full gap-2">
                   <ShoppingCart className="h-4 w-4" />
-                  Add to Cart
+                  Add to Your Collection
                 </Button>
               </GlassCard>
             </ScrollReveal>

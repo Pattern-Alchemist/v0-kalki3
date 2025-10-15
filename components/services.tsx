@@ -73,9 +73,9 @@ export function Services() {
                 <p className="text-sm text-muted-foreground mt-1 flex-1">{s.desc}</p>
                 <button
                   onClick={() => handleBookNow(s.title)}
-                  className="mt-3 inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors group"
+                  className="mt-3 inline-flex items-center text-cyan-400 hover:text-cyan-300 transition-colors group font-medium"
                 >
-                  Book now <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
+                  Start your journey <span className="ml-1 group-hover:translate-x-1 transition-transform">→</span>
                 </button>
               </GlassCard>
             </ScrollReveal>
