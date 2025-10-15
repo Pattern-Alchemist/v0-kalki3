@@ -37,7 +37,7 @@ export function LeadGenerationForm() {
     return emailRegex.test(email)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
 
@@ -68,6 +68,24 @@ export function LeadGenerationForm() {
       setIsSubmitting(false)
       toast.error("Please fix the errors in the form")
       return
+    }
+
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (!response.ok) {
+        console.error("[v0] Failed to submit lead data")
+        // Continue anyway - don't block user experience
+      }
+    } catch (error) {
+      console.error("[v0] Error submitting lead:", error)
+      // Continue anyway - don't block user experience
     }
 
     const params = new URLSearchParams({
