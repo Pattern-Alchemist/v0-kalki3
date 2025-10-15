@@ -32,8 +32,19 @@ export function BookingModal({ isOpen, onClose, plan }: BookingModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Here you can add API call to save booking details
-    console.log("[v0] Booking submitted:", { ...formData, plan: plan.name })
+    try {
+      await fetch("/api/consultations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          plan: plan.name,
+          price: plan.price,
+        }),
+      })
+    } catch (error) {
+      console.error("[v0] Booking submission error:", error)
+    }
 
     // Show success message
     setStep("success")

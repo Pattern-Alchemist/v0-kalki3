@@ -17,8 +17,15 @@ export function NewsletterSignup() {
     e.preventDefault()
     setLoading(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+    } catch (error) {
+      console.error("[v0] Newsletter submission error:", error)
+    }
 
     toast.success("Successfully subscribed to newsletter!")
     setEmail("")

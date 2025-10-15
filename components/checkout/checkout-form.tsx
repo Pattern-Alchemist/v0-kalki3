@@ -21,8 +21,27 @@ export function CheckoutForm() {
     e.preventDefault()
     setLoading(true)
 
-    // Simulate payment processing
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    const formElement = e.target as HTMLFormElement
+    const formData = new FormData(formElement)
+    const orderData = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      address: formData.get("address"),
+      city: formData.get("city"),
+      zip: formData.get("zip"),
+      items: items,
+      total: total() + 50,
+    }
+
+    try {
+      await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      })
+    } catch (error) {
+      console.error("[v0] Checkout submission error:", error)
+    }
 
     toast.success("Order placed successfully!")
     clearCart()
@@ -48,24 +67,24 @@ export function CheckoutForm() {
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="name">Full Name</Label>
-                      <Input id="name" required className="mt-1" />
+                      <Input id="name" name="name" required className="mt-1" />
                     </div>
                     <div>
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" required className="mt-1" />
+                      <Input id="email" name="email" type="email" required className="mt-1" />
                     </div>
                     <div>
                       <Label htmlFor="address">Address</Label>
-                      <Input id="address" required className="mt-1" />
+                      <Input id="address" name="address" required className="mt-1" />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="city">City</Label>
-                        <Input id="city" required className="mt-1" />
+                        <Input id="city" name="city" required className="mt-1" />
                       </div>
                       <div>
                         <Label htmlFor="zip">ZIP Code</Label>
-                        <Input id="zip" required className="mt-1" />
+                        <Input id="zip" name="zip" required className="mt-1" />
                       </div>
                     </div>
                   </div>

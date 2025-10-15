@@ -29,8 +29,19 @@ export function ExitIntentPopup() {
     return () => document.removeEventListener("mouseleave", handleMouseLeave)
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    try {
+      await fetch("/api/exit-popup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+    } catch (error) {
+      console.error("[v0] Exit popup submission error:", error)
+    }
+
     toast({
       title: "Welcome Offer Claimed!",
       description: "Check your email for your 20% discount code",

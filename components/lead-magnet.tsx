@@ -20,8 +20,15 @@ export function LeadMagnet() {
     e.preventDefault()
     setLoading(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      await fetch("/api/lead-magnet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email }),
+      })
+    } catch (error) {
+      console.error("[v0] Lead magnet submission error:", error)
+    }
 
     toast({
       title: "Success!",

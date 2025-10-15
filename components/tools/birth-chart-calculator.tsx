@@ -24,8 +24,15 @@ export function BirthChartCalculator() {
     e.preventDefault()
     setLoading(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      await fetch("/api/birth-chart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+    } catch (error) {
+      console.error("[v0] Birth chart submission error:", error)
+    }
 
     // Mock chart data
     const mockChart = {

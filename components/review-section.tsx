@@ -48,10 +48,24 @@ export function ReviewSection() {
   const [rating, setRating] = useState(0)
   const [content, setContent] = useState("")
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (rating === 0 || !content.trim()) {
       toast.error("Please provide a rating and review")
       return
+    }
+
+    try {
+      await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          author: "Anonymous User",
+          rating,
+          content,
+        }),
+      })
+    } catch (error) {
+      console.error("[v0] Review submission error:", error)
     }
 
     const newReview: Review = {

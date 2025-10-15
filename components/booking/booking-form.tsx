@@ -49,8 +49,20 @@ export function BookingForm() {
 
     setLoading(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      await fetch("/api/consultations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          date: selectedDate.toISOString(),
+          service: selectedService?.name,
+          price: selectedService?.price,
+        }),
+      })
+    } catch (error) {
+      console.error("[v0] Booking submission error:", error)
+    }
 
     toast.success("Booking confirmed! Check your email for details.")
     setLoading(false)
