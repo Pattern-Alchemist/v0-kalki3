@@ -15,6 +15,7 @@ import { Toaster } from "sonner"
 import { ReviewSection } from "@/components/review-section"
 import { generateOrganizationSchema, generateServiceSchema } from "@/lib/structured-data"
 import { VideoSection } from "@/components/video-section"
+import { LeadGenerationForm } from "@/components/lead-generation-form"
 
 export default function HomePage() {
   const organizationSchema = generateOrganizationSchema()
@@ -31,6 +32,8 @@ export default function HomePage() {
 
       <main className="flex-1 homepage-bg relative z-10">
         <HeroVideo />
+
+        <LeadGenerationForm />
 
         <ConstellationDivider />
 
