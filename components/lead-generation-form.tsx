@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -11,6 +12,7 @@ import { Sparkles, Send } from "lucide-react"
 import { toast } from "sonner"
 
 export function LeadGenerationForm() {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -68,24 +70,18 @@ export function LeadGenerationForm() {
       return
     }
 
-    // Construct WhatsApp message
-    const message = `Hi, I am interested in your astrology services via AstroKalki
+    const params = new URLSearchParams({
+      name: formData.name,
+      mobile: formData.mobile,
+      email: formData.email,
+      ...(formData.query && { query: formData.query }),
+    })
 
-Name: ${formData.name}
-Mobile: ${formData.mobile}
-Email: ${formData.email}
-${formData.query ? `Query: ${formData.query}` : ""}`
-
-    const whatsappUrl = `https://wa.me/918920862931?text=${encodeURIComponent(message)}`
-
-    // Redirect to WhatsApp
-    window.open(whatsappUrl, "_blank")
+    router.push(`/thank-you?${params.toString()}`)
 
     // Show success message
-    toast.success("Redirecting to WhatsApp...")
+    toast.success("Thank you! Redirecting...")
 
-    // Reset form
-    setFormData({ name: "", mobile: "", email: "", query: "" })
     setIsSubmitting(false)
   }
 
