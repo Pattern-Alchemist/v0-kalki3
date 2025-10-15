@@ -90,6 +90,14 @@ export function MainNav() {
                 Community
               </Link>
             </li>
+            <li>
+              <Link
+                className="text-sm font-medium bg-gradient-to-r from-cosmic-purple to-cosmic-cyan bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+                href="/get-started"
+              >
+                Get Started
+              </Link>
+            </li>
           </ul>
         </div>
       </nav>
@@ -157,6 +165,15 @@ export function MainNav() {
                 className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
               >
                 Community
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/get-started"
+                onClick={() => setOpen(false)}
+                className="block px-3 py-2 rounded-lg bg-gradient-to-r from-cosmic-purple to-cosmic-cyan text-white font-medium hover:opacity-90 transition-opacity"
+              >
+                Get Started
               </Link>
             </li>
           </ul>
