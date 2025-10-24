@@ -1,49 +1,59 @@
-import { NextResponse } from "next/server"
-import mysql from "mysql2/promise"
+import { type NextRequest, NextResponse } from "next/server"
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { name, email, mobile, query } = body
+    const leadData = await request.json()
 
-    // Validate required fields
-    if (!name || !email) {
-      return NextResponse.json(
-        { error: "Name and email are required" },
-        { status: 400 }
-      )
-    }
+    // Log the lead data (for debugging)
+    console.log("[v0] Lead received:", leadData)
 
-    // Create database connection
-    const connection = await mysql.createConnection(process.env.DATABASE_URL!)
+    // Send data to Hostinger VPS
+    const VPS_ENDPOINT = process.env.HOSTINGER_VPS_ENDPOINT || "https://your-vps-endpoint.com/api/leads"
+    const VPS_API_KEY = process.env.VPS_API_KEY
 
     try {
-      // Insert into database
-      const [result] = await connection.execute(
-        `INSERT INTO lead_magnet_submissions (name, email, mobile, query, source, submitted_at, lead_magnet_type)
-         VALUES (?, ?, ?, ?, ?, NOW(), ?)`,
-        [
-          name,
-          email,
-          mobile || null,
-          query || null,
-          "website_lead_magnet",
-          "5d_guidance"
-        ]
-      )
+      const vpsResponse = await fetch(VPS_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(VPS_API_KEY && { Authorization: `Bearer ${VPS_API_KEY}` }),
+        },
+        body: JSON.stringify({
+          ...leadData,
+          timestamp: new Date().toISOString(),
+          source: "lead_generation_form",
+        }),
+      })
 
-      console.log("[v0] Lead magnet submission saved:", { name, email })
-
-      return NextResponse.json({ success: true, id: (result as any).insertId })
-    } finally {
-      // Always close the connection
-      await connection.end()
+      if (!vpsResponse.ok) {
+        const errorText = await vpsResponse.text()
+        console.error("[v0] VPS response error:", errorText)
+        // Continue even if VPS fails - we don't want to block the user
+      } else {
+        const vpsData = await vpsResponse.json()
+        console.log("[v0] Successfully sent to VPS:", vpsData)
+      }
+    } catch (vpsError) {
+      console.error("[v0] Error sending to VPS:", vpsError)
+      // Continue even if VPS fails
     }
-  } catch (error) {
-    console.error("[v0] Lead magnet API error:", error)
+
+    // Return success response
     return NextResponse.json(
-      { error: "Failed to process lead magnet submission" },
-      { status: 500 }
+      {
+        success: true,
+        message: "Lead captured successfully",
+      },
+      { status: 200 },
+    )
+  } catch (error) {
+    console.error("[v0] Error processing lead:", error)
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to process lead",
+      },
+      { status: 500 },
     )
   }
 }

@@ -13,8 +13,6 @@ import { useToast } from "@/hooks/use-toast"
 export function LeadMagnet() {
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
-    const [mobile, setMobile] = useState("")
-    const [query, setQuery] = useState("")
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
 
@@ -26,7 +24,8 @@ export function LeadMagnet() {
       await fetch("/api/lead-magnet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, mobile, que}),      })
+        body: JSON.stringify({ name, email }),
+      })
     } catch (error) {
       console.error("[v0] Lead magnet submission error:", error)
     }
