@@ -19,17 +19,16 @@ export async function POST(request: Request) {
 
     return new Promise((resolve) => {
       // Insert into database
-      const sql = `INSERT INTO lead_magnet_submissions (name, email, mobile, query, source, submitted_at, lead_magnet_type)
-                   VALUES (?, ?, ?, ?, ?, NOW(), ?)`;
-      const values = [name, email, mobile || null, query || null, "website_lead_magnet", "sd_guidance"];
+      const sql = `INSERT INTO lead_magnet_submissions (name, email, mobile, query, source, lead_magnet_type) VALUES (?, ?, ?, ?, ?, ?)`;
+      const values = [name, email, mobile || null, query || null, "website_lead_magnet", "General Consultation"];
 
       connection.execute(sql, values, (error: any, results: any) => {
         connection.end();
-        
+
         if (error) {
           console.error("Database error:", error);
           return resolve(NextResponse.json(
-            { error: "Failed to save lead" },
+            { error: "Failed to save lead", details: error.message },
             { status: 500 }
           ));
         }
