@@ -1,49 +1,50 @@
-import { NextResponse } from "next/server"
-import mysql from "mysql2/promise"
+import { NextResponse } from "next/server";
+import mysql from "mysql2";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
-    const { name, email, mobile, query } = body
+    const body = await request.json();
+    const { name, email, mobile, query } = body;
 
     // Validate required fields
     if (!name || !email) {
       return NextResponse.json(
         { error: "Name and email are required" },
         { status: 400 }
-      )
+      );
     }
 
     // Create database connection
-    const connection = await mysql.createConnection(process.env.DATABASE_URL!)
+    const connection = mysql.createConnection(process.env.DATABASE_URL!);
 
-    try {
+    return new Promise((resolve) => {
       // Insert into database
-      const [result] = await connection.execute(
-        `INSERT INTO lead_magnet_submissions (name, email, mobile, query, source, submitted_at, lead_magnet_type)
-         VALUES (?, ?, ?, ?, ?, NOW(), ?)`,
-        [
-          name,
-          email,
-          mobile || null,
-          query || null,
-          "website_lead_magnet",
-          "5d_guidance"
-        ]
-      )
+      const sql = `INSERT INTO lead_magnet_submissions (name, email, mobile, query, source, submitted_at, lead_magnet_type)
+                   VALUES (?, ?, ?, ?, ?, NOW(), ?)`;
+      const values = [name, email, mobile || null, query || null, "website_lead_magnet", "sd_guidance"];
 
-      console.log("[v0] Lead magnet submission saved:", { name, email })
+      connection.execute(sql, values, (error: any, results: any) => {
+        connection.end();
+        
+        if (error) {
+          console.error("Database error:", error);
+          return resolve(NextResponse.json(
+            { error: "Failed to save lead" },
+            { status: 500 }
+          ));
+        }
 
-      return NextResponse.json({ success: true, id: (result as any).insertId })
-    } finally {
-      // Always close the connection
-      await connection.end()
-    }
-  } catch (error) {
-    console.error("[v0] Lead magnet API error:", error)
+        resolve(NextResponse.json(
+          { success: true, message: "Lead saved successfully" },
+          { status: 201 }
+        ));
+      });
+    });
+  } catch (error: any) {
+    console.error("API error:", error);
     return NextResponse.json(
-      { error: "Failed to process lead magnet submission" },
+      { error: error.message || "Internal server error" },
       { status: 500 }
-    )
+    );
   }
 }
