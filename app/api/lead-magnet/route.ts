@@ -1,37 +1,49 @@
 import { NextResponse } from "next/server"
+import mysql from "mysql2/promise"
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { name, email } = body
+    const { name, email, mobile, query } = body
 
-    // Send to Hostinger VPS backend
-    try {
-      const vpsResponse = await fetch(`${process.env.HOSTINGER_VPS_ENDPOINT}/api/lead-magnet`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.VPS_API_KEY}`,
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          magnet_type: "birth_chart_guide",
-          downloaded_at: new Date().toISOString(),
-          source: "website_lead_magnet",
-        }),
-      })
-
-      if (!vpsResponse.ok) {
-        console.error("[v0] VPS storage failed:", await vpsResponse.text())
-      }
-    } catch (vpsError) {
-      console.error("[v0] VPS connection error:", vpsError)
+    // Validate required fields
+    if (!name || !email) {
+      return NextResponse.json(
+        { error: "Name and email are required" },
+        { status: 400 }
+      )
     }
 
-    return NextResponse.json({ success: true })
+    // Create database connection
+    const connection = await mysql.createConnection(process.env.DATABASE_URL!)
+
+    try {
+      // Insert into database
+      const [result] = await connection.execute(
+        `INSERT INTO lead_magnet_submissions (name, email, mobile, query, source, submitted_at, lead_magnet_type) 
+         VALUES (?, ?, ?, ?, ?, NOW(), ?)`,
+        [
+          name,
+          email,
+          mobile || null,
+          query || null,
+          "website_lead_magnet",
+          "5d_guidance"
+        ]
+      )
+
+      console.log("[v0] Lead magnet submission saved:", { name, email })
+
+      return NextResponse.json({ success: true, id: (result as any).insertId })
+    } finally {
+      // Always close the connection
+      await connection.end()
+    }
   } catch (error) {
     console.error("[v0] Lead magnet API error:", error)
-    return NextResponse.json({ error: "Failed to process lead magnet" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Failed to process lead magnet submission" },
+      { status: 500 }
+    )
   }
 }
