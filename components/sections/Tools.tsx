@@ -1,6 +1,6 @@
 "use client";
-
 import React from "react";
+import Link from "next/link";
 import toolsData from "@/content/tools.json";
 
 interface Tool {
@@ -29,40 +29,31 @@ export default function Tools() {
           Unlock the power of your karmic journey with our advanced premium tools
         </p>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
         {tools.map((tool) => (
           <div
             key={tool.id}
-            className="bg-card border rounded-lg p-6 hover:shadow-lg transition-shadow duration-300"
+            className="bg-card rounded-xl p-6 border border-border hover:border-purple-500 transition-all duration-300 shadow-lg hover:shadow-purple-500/20"
           >
-            <div className="flex items-start gap-4 mb-4">
+            <div className="flex items-center gap-4 mb-4">
               <div className="text-4xl">{tool.icon}</div>
-              <div className="flex-1">
-                <h2 className="text-2xl font-semibold mb-2">{tool.name}</h2>
-                <span className="inline-block px-3 py-1 text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 rounded-full">
-                  {tool.category}
-                </span>
-              </div>
+              <h2 className="text-2xl font-bold">{tool.name}</h2>
             </div>
-            
-            <p className="text-muted-foreground mb-4">{tool.description}</p>
-            
-            <div className="space-y-2">
-              <h3 className="font-semibold text-sm uppercase tracking-wide">Features:</h3>
-              <ul className="space-y-1">
-                {tool.features.map((feature, index) => (
-                  <li key={index} className="flex items-start gap-2 text-sm">
-                    <span className="text-purple-600 mt-1">✓</span>
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <button className="mt-6 w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity">
+            <p className="text-muted-foreground mb-6">{tool.description}</p>
+            <ul className="space-y-2 mb-6">
+              {tool.features.map((feature, index) => (
+                <li key={index} className="flex items-start gap-2">
+                  <span className="text-purple-500 mt-1">✓</span>
+                  <span className="text-sm">{feature}</span>
+                </li>
+              ))}
+            </ul>
+            <Link
+              href={`/tools/${tool.id}`}
+              className="mt-6 w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity block text-center"
+            >
               Explore {tool.name}
-            </button>
+            </Link>
           </div>
         ))}
       </div>
