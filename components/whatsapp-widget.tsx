@@ -1,5 +1,6 @@
+// WhatsApp Widget - Disabled in favor of lead magnet form
+/*
 "use client"
-
 import { MessageCircle, X } from "lucide-react"
 import { useState } from "react"
 
@@ -34,18 +35,23 @@ export function WhatsAppWidget() {
           </div>
           <div className="p-4">
             <p className="text-sm text-muted-foreground mb-4">
-              Connect with us on WhatsApp for quick questions, booking assistance, or spiritual guidance.
+              Click below to start a WhatsApp conversation
             </p>
             <button
               onClick={handleWhatsAppClick}
-              className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-cyan-500 via-cyan-600 to-pink-500 hover:from-cyan-400 hover:via-cyan-500 hover:to-pink-400 text-white font-semibold transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/30"
+              className="w-full bg-gradient-to-r from-cyan-500 to-pink-500 hover:from-cyan-400 hover:to-pink-400 text-white font-semibold py-2 px-4 rounded-lg transition-all"
             >
-              <MessageCircle className="h-5 w-5" />
-              Start Chat on WhatsApp
+              Chat on WhatsApp
             </button>
           </div>
         </div>
       )}
     </>
   )
+}
+*/
+
+// Placeholder export to prevent import errors
+export function WhatsAppWidget() {
+  return null
 }
