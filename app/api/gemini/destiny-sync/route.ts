@@ -1,11 +1,28 @@
 import { NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
-const genAI = new GoogleGenerativeAI('AIzaSyC72H5VR4GXx7g4URpJu9LT0N9pp_IjVxg')
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
 
 export async function POST(request: Request) {
   try {
+    // Validate API key
+    if (!process.env.GEMINI_API_KEY) {
+      return NextResponse.json(
+        { error: 'API key not configured' },
+        { status: 500 }
+      )
+    }
+
     const { person1, person2 } = await request.json()
+
+    // Validate input
+    if (!person1 || !person2 || !person1.name || !person1.zodiac || !person2.name || !person2.zodiac) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      )
+    }
+
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' })
 
     const prompt = `You are a Vedic astrology expert specializing in DESTINY SYNCHRONIZATION and COSMIC TIMING analysis.
@@ -47,10 +64,24 @@ Ensure all fields are filled with detailed, actionable cosmic timing guidance. T
 
     const result = await model.generateContent(prompt)
     const text = (await result.response).text()
+
+    // Extract JSON from response
     const jsonMatch = text.match(/\{[\s\S]*\}/)
-    return NextResponse.json(jsonMatch ? JSON.parse(jsonMatch[0]) : { error: 'Invalid response format' })
+    if (!jsonMatch) {
+      return NextResponse.json(
+        { error: 'Invalid response format from AI' },
+        { status: 500 }
+      )
+    }
+
+    const data = JSON.parse(jsonMatch[0])
+    return NextResponse.json(data)
+
   } catch (error) {
     console.error('Destiny Sync API Error:', error)
-    return NextResponse.json({ error: 'Failed to generate destiny synchronization analysis' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Failed to generate destiny synchronization analysis' },
+      { status: 500 }
+    )
   }
 }
