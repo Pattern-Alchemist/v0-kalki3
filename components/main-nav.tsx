@@ -1,184 +1,175 @@
-"use client"
-import Image from "next/image"
-import Link from "next/link"
-import { useState } from "react"
-import { Menu, X } from "lucide-react"
-import { CartButton } from "./cart-button"
-import { AuthButton } from "./auth/auth-button"
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function MainNav() {
-  const [open, setOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="site-header w-full bg-background/80 backdrop-blur-xl text-foreground border-b border-border/50 sticky top-0 z-50 transition-all">
-      <nav aria-label="Primary" className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link className="flex items-center gap-2 group" href="/">
-          <Image
-            src="/images/logo.jpeg"
-            alt="AstroKalki Logo"
-            width={240}
-            height={80}
-            className="w-auto transition-transform group-hover:scale-105 h-[85px]"
-            priority
-          />
-        </Link>
-        <div className="flex items-center gap-3">
-          <AuthButton />
-          <CartButton />
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-background/80 backdrop-blur-lg shadow-lg"
+          : "bg-background/50"
+      }`}
+    >
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="text-2xl font-bold bg-gradient-to-r from-cosmic-purple to-cosmic-cyan bg-clip-text text-transparent">
+              AstroKalki
+            </span>
+          </Link>
+
+          <div className="hidden md:flex items-center gap-6">
+            <Link
+              href="/"
+              className="text-foreground hover:text-cosmic-purple transition-colors"
+            >
+              Home
+            </Link>
+            <Link
+              href="/tools"
+              className="text-foreground hover:text-cosmic-purple transition-colors"
+            >
+              Tools
+            </Link>
+            <Link
+              href="/pricing"
+              className="text-foreground hover:text-cosmic-purple transition-colors"
+            >
+              Pricing
+            </Link>
+            <Link
+              href="/courses"
+              className="text-foreground hover:text-cosmic-purple transition-colors"
+            >
+              Courses
+            </Link>
+            <Link
+              href="/consultations"
+              className="text-foreground hover:text-cosmic-purple transition-colors"
+            >
+              Consultations
+            </Link>
+            <Link
+              href="/community"
+              className="text-foreground hover:text-cosmic-purple transition-colors"
+            >
+              Community
+            </Link>
+            <Link
+              href="/get-started"
+              className="px-4 py-2 rounded-lg bg-gradient-to-r from-cosmic-purple to-cosmic-cyan text-white font-medium hover:opacity-90 transition-opacity"
+            >
+              Get Started
+            </Link>
+          </div>
+
           <button
-            className="md:hidden inline-flex items-center justify-center rounded-lg border border-border/50 bg-card/50 backdrop-blur px-3 py-2 hover:bg-accent transition-colors"
-            aria-expanded={open}
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((v) => !v)}
+            className="md:hidden text-foreground"
+            onClick={() => setOpen(!open)}
           >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              {open ? (
+                <path d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
           </button>
-          <ul className="hidden md:flex items-center gap-6">
-            <li>
-              <Link
-                className="text-sm font-medium hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
-                href="/#horoscope"
-              >
-                Horoscope
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="text-sm font-medium hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
-                href="/tools"
-              >
-                Tools
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="text-sm font-medium hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
-                href="/resources"
-              >
-                Resources
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="text-sm font-medium hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
-                href="/pricing"
-              >
-                Pricing
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="text-sm font-medium hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
-                href="/courses"
-              >
-                Courses
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="text-sm font-medium hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
-                href="/consultations"
-              >
-                Consultations
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="text-sm font-medium hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full"
-                href="/community"
-              >
-                Community
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="text-sm font-medium bg-gradient-to-r from-cosmic-purple to-cosmic-cyan bg-clip-text text-transparent hover:opacity-80 transition-opacity"
-                href="/get-started"
-              >
-                Get Started
-              </Link>
-            </li>
-          </ul>
         </div>
-      </nav>
-      {open && (
-        <div className="md:hidden border-t border-border/50 bg-card/95 backdrop-blur-xl animate-in slide-in-from-top-5">
-          <ul className="px-4 py-4 grid gap-1">
-            <li>
-              <Link
-                href="/#horoscope"
-                onClick={() => setOpen(false)}
-                className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                Horoscope
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/tools"
-                onClick={() => setOpen(false)}
-                className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                Tools
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/resources"
-                onClick={() => setOpen(false)}
-                className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                Resources
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/pricing"
-                onClick={() => setOpen(false)}
-                className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                Pricing
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/courses"
-                onClick={() => setOpen(false)}
-                className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                Courses
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/consultations"
-                onClick={() => setOpen(false)}
-                className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                Consultations
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/community"
-                onClick={() => setOpen(false)}
-                className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
-              >
-                Community
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/get-started"
-                onClick={() => setOpen(false)}
-                className="block px-3 py-2 rounded-lg bg-gradient-to-r from-cosmic-purple to-cosmic-cyan text-white font-medium hover:opacity-90 transition-opacity"
-              >
-                Get Started
-              </Link>
-            </li>
-          </ul>
-        </div>
-      )}
-    </header>
-  )
+
+        {open && (
+          <div className="md:hidden pb-4">
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  href="/"
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/tools"
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
+                >
+                  Tools
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/pricing"
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
+                >
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/courses"
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
+                >
+                  Courses
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/consultations"
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
+                >
+                  Consultations
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/community"
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded-lg hover:bg-accent transition-colors"
+                >
+                  Community
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/get-started"
+                  onClick={() => setOpen(false)}
+                  className="block px-3 py-2 rounded-lg bg-gradient-to-r from-cosmic-purple to-cosmic-cyan text-white font-medium hover:opacity-90 transition-opacity"
+                >
+                  Get Started
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
 }
