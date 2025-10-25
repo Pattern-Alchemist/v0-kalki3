@@ -1,0 +1,96 @@
+name: Deploy AstroKalki Premium Tools
+on:
+  workflow_dispatch:
+jobs:
+  setup-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - run: |
+          mkdir -p components/delivery app/api/gemini/relationship-compass app/tools/relationship-compass
+          cat > components/delivery/index.tsx << 'EOF'
+          export { PDFGenerator } from './pdf-generator'
+          export { WhatsAppShare } from './whatsapp-share'
+          export { UPIWidget } from './upi-widget'
+          EOF
+          cat > components/delivery/pdf-generator.tsx << 'EOF'
+          'use client'
+          import { useState } from 'react'
+          import { Button } from '@/components/ui/button'
+          import { Download } from 'lucide-react'
+          export function PDFGenerator({ contentRef, filename, price = 499, isPaid = false }: any) {
+            if (!isPaid) return (<div className="text-center p-6 bg-purple-50 dark:bg-purple-900/20 rounded-lg"><h3 className="text-xl font-semibold mb-2">Get Report</h3><p className="text-4xl font-bold text-primary mb-4">₹{price}</p><Button size="lg" onClick={() => window.location.href = '#payment'}><Download className="mr-2 h-5 w-5" />Purchase PDF</Button></div>)
+            return <Button size="lg" className="w-full"><Download className="mr-2" />Download</Button>
+          }
+          EOF
+          cat > components/delivery/whatsapp-share.tsx << 'EOF'
+          'use client'
+          import { MessageCircle } from 'lucide-react'
+          import { Button } from '@/components/ui/button'
+          export function WhatsAppShare({ reportTitle, reportSummary }: any) {
+            return <Button onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`🔮 ${reportTitle}\n${reportSummary}\n✨ AstroKalki.com`)}`, '_blank')} variant="outline" className="w-full"><MessageCircle className="mr-2 h-4 w-4" />Share</Button>
+          }
+          EOF
+          cat > components/delivery/upi-widget.tsx << 'EOF'
+          'use client'
+          import { useState } from 'react'
+          import { CreditCard } from 'lucide-react'
+          import { Button } from '@/components/ui/button'
+          import { Input } from '@/components/ui/input'
+          export function UPIWidget({ amount, productName, onPaymentVerified }: any) {
+            const [txnId, setTxnId] = useState('')
+            return (<div className="space-y-4 p-6 bg-teal-50 dark:bg-teal-900/20 rounded-lg"><div className="text-center"><h3 className="text-2xl font-bold mb-2">Payment</h3><p className="text-4xl font-bold text-primary mb-2">₹{amount}</p><p className="text-sm">UPI: 9211271977@hdfcbank</p></div><Input placeholder="Transaction ID" value={txnId} onChange={(e) => setTxnId(e.target.value)} /><Button onClick={() => txnId.length >= 12 && onPaymentVerified()} className="w-full" size="lg"><CreditCard className="mr-2" />Verify</Button></div>)
+          }
+          EOF
+          cat > app/api/gemini/relationship-compass/route.ts << 'EOF'
+          import { NextResponse } from 'next/server'
+          import { GoogleGenerativeAI } from '@google/generative-ai'
+          const genAI = new GoogleGenerativeAI('AIzaSyC72H5VR4GXx7g4URpJu9LT0N9pp_IjVxg')
+          export async function POST(request: Request) {
+            try {
+              const { person1, person2 } = await request.json()
+              const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' })
+              const result = await model.generateContent(`Analyze ${person1.name} (${person1.zodiac}) & ${person2.name} (${person2.zodiac}). JSON: {"overallScore": 85, "summary": "...", "strengths": ["..."], "challenges": ["..."]}`)
+              const text = (await result.response).text()
+              const jsonMatch = text.match(/\{[\s\S]*\}/)
+              return NextResponse.json(jsonMatch ? JSON.parse(jsonMatch[0]) : {error: 'Invalid'})
+            } catch (error) {
+              return NextResponse.json({ error: 'Failed' }, { status: 500 })
+            }
+          }
+          EOF
+          cat > app/tools/relationship-compass/page.tsx << 'EOF'
+          'use client'
+          import { useState, useRef } from 'react'
+          import { Button } from '@/components/ui/button'
+          import { Input } from '@/components/ui/input'
+          import { Label } from '@/components/ui/label'
+          import { PDFGenerator, WhatsAppShare, UPIWidget } from '@/components/delivery'
+          import { Heart } from 'lucide-react'
+          export default function RelationshipCompassPage() {
+            const [person1, setPerson1] = useState({ name: '', zodiac: '' })
+            const [person2, setPerson2] = useState({ name: '', zodiac: '' })
+            const [result, setResult] = useState<any>(null)
+            const [isLoading, setIsLoading] = useState(false)
+            const [isPaid, setIsPaid] = useState(false)
+            const reportRef = useRef<HTMLDivElement>(null)
+            const handleAnalyze = async () => {
+              if (!person1.name || !person2.name) return alert('Fill all fields')
+              setIsLoading(true)
+              try {
+                const res = await fetch('/api/gemini/relationship-compass', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ person1, person2 }) })
+                setResult(await res.json())
+              } finally { setIsLoading(false) }
+            }
+            return (<div className="min-h-screen p-8"><div className="max-w-4xl mx-auto space-y-8"><div className="text-center space-y-4"><Heart className="w-16 h-16 mx-auto text-rose-600" /><h1 className="text-4xl font-bold">Relationship Compass</h1></div><div className="grid md:grid-cols-2 gap-6 p-6 bg-white dark:bg-slate-800 rounded-lg"><div className="space-y-4"><h3 className="font-semibold">Person 1</h3><div><Label>Name</Label><Input value={person1.name} onChange={(e) => setPerson1({...person1, name: e.target.value})} /></div><div><Label>Zodiac</Label><Input value={person1.zodiac} onChange={(e) => setPerson1({...person1, zodiac: e.target.value})} /></div></div><div className="space-y-4"><h3 className="font-semibold">Person 2</h3><div><Label>Name</Label><Input value={person2.name} onChange={(e) => setPerson2({...person2, name: e.target.value})} /></div><div><Label>Zodiac</Label><Input value={person2.zodiac} onChange={(e) => setPerson2({...person2, zodiac: e.target.value})} /></div></div><Button onClick={handleAnalyze} disabled={isLoading} className="md:col-span-2" size="lg">{isLoading ? 'Analyzing...' : 'Generate Report'}</Button></div>{result && (<div ref={reportRef} className="p-8 bg-white dark:bg-slate-800 rounded-lg space-y-6"><div className="text-center"><h2 className="text-3xl font-bold">Compatibility: {result.overallScore}%</h2><p className="mt-4">{result.summary}</p></div><div className="grid md:grid-cols-2 gap-4"><PDFGenerator contentRef={reportRef} filename="relationship-compass" isPaid={isPaid} /><WhatsAppShare reportTitle="Relationship Compass" reportSummary={`${result.overallScore}% compatible!`} /></div>{!isPaid && <UPIWidget amount={499} productName="Relationship Compass" onPaymentVerified={() => setIsPaid(true)} />}</div>)}</div></div>)
+          }
+          EOF
+          npm install @google/generative-ai
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "feat: deploy AstroKalki premium tools" || true
+          git push
