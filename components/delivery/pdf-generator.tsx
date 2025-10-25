@@ -15,28 +15,49 @@ export function PDFGenerator({ contentRef, filename, price = 499, isPaid = false
     }, 1600)
   }
 
-  if (!isPaid) {
-    return (
-      <div className="text-center p-6 bg-gradient-to-br from-purple-100/70 to-pink-100/70 dark:from-purple-800/30 dark:to-pink-800/30 rounded-lg border border-purple-300 dark:border-purple-700">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 mb-2">
-          <Lock className="w-8 h-8 text-white" />
+if (!isPaid) {
+  return (
+    <div className="p-6 bg-gradient-to-br from-purple-100/70 to-pink-100/70 dark:from-purple-800/30 dark:to-pink-800/30 rounded-lg border border-purple-300 dark:border-purple-700">
+      <div className="mb-4">
+        <div className="relative rounded-xl overflow-hidden shadow aspect-video bg-slate-100">
+          <img
+            src="/sample-report-preview.png" // Use a screenshot or example (add static file!)
+            alt="Report Preview"
+            className="w-full opacity-60 blur-sm"
+          />
+          <div className="absolute inset-0 flex flex-col justify-end items-center bg-black/40 p-2">
+            <span className="text-white font-bold text-xl flex items-center gap-2">
+              <Lock className="w-6 h-6 inline" /> Unlock full details
+            </span>
+            <span className="text-white/70 mt-2 text-xs">
+              Sneak peek: Only the first part is visible.
+            </span>
+          </div>
         </div>
-        <h3 className="text-xl font-semibold mb-2">Unlock your Full PDF Report!</h3>
-        <p className="mb-2 text-muted-foreground">Get a downloadable, shareable PDF of your reading with high-res charts & stepwise guidance.</p>
-        <Button
-          size="lg"
-          className="w-full font-bold"
-          onClick={() => alert('Please complete the payment to get your PDF!')}
-        >
-          Unlock PDF for ₹{price}
-        </Button>
-        <div className="text-xs mt-2 text-muted-foreground">
-          <span className="mr-2">One-time payment</span>
-          <BadgeCheck className="inline-block text-green-600 w-4 h-4" /> Secure
-        </div>
+        <ul className="mt-4 mb-3 text-sm text-muted-foreground">
+          <li>✔️ Personalized, 12-page PDF analysis</li>
+          <li>✔️ Includes destiny charts & remedies</li>
+          <li>✔️ Share PDF easily on WhatsApp</li>
+          <li>✔️ One-time payment. Download forever!</li>
+        </ul>
       </div>
-    )
-  }
+      <Button
+        size="lg"
+        className="w-full font-bold"
+        onClick={() => alert('Scan QR or pay via UPI for instant access!')}
+      >
+        See Full Insights & Charts – Pay ₹{price} to Unlock
+      </Button>
+      <p className="text-xs mt-2 text-green-700 flex items-center gap-1">
+        <BadgeCheck className="text-green-600 w-4 h-4" /> 100% secure UPI – One-time only
+      </p>
+      <span className="block mt-1 text-xs text-red-500 font-medium italic">
+        View 2/8 insights for free. Unlock ALL sections!
+      </span>
+    </div>
+  )
+}
+
 
   return (
     <Button
