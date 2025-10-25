@@ -21,58 +21,41 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
       
-      - name: Create components directory
+      - name: Create directories
         run: |
           mkdir -p components/delivery
           mkdir -p app/api/generate-pdf
       
-      - name: Create delivery components index
+      - name: Create all delivery components
         run: |
-          cat > components/delivery/index.tsx << 'EOF'
+          cat > components/delivery/index.tsx << 'ENDFILE'
           export { PDFGenerator } from './pdf-generator'
           export { WhatsAppShare } from './whatsapp-share'
           export { EmailShare } from './email-share'
           export { DownloadButton } from './download-button'
           export { PrintButton } from './print-button'
           export { ShareButton } from './share-button'
-          EOF
-      
-      - name: Create PDF Generator component
-        run: |
-          cat > components/delivery/pdf-generator.tsx << 'EOF'
-          'use client'
+          ENDFILE
 
+          cat > components/delivery/pdf-generator.tsx << 'ENDFILE'
+          'use client'
           import { useState } from 'react'
           import { Button } from '@/components/ui/button'
           import { FileDown, Loader2 } from 'lucide-react'
-
-          interface PDFGeneratorProps {
-            horoscope: any
-            onGenerate?: (pdfUrl: string) => void
-          }
-
+          interface PDFGeneratorProps { horoscope: any; onGenerate?: (pdfUrl: string) => void }
           export function PDFGenerator({ horoscope, onGenerate }: PDFGeneratorProps) {
             const [isGenerating, setIsGenerating] = useState(false)
-
             const generatePDF = async () => {
               setIsGenerating(true)
-              
               try {
                 const response = await fetch('/api/generate-pdf', {
                   method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
+                  headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({ horoscope }),
                 })
-
-                if (!response.ok) {
-                  throw new Error('Failed to generate PDF')
-                }
-
+                if (!response.ok) throw new Error('Failed to generate PDF')
                 const blob = await response.blob()
                 const url = window.URL.createObjectURL(blob)
-                
                 const a = document.createElement('a')
                 a.href = url
                 a.download = `horoscope-${horoscope.name || 'report'}-${new Date().toISOString().split('T')[0]}.pdf`
@@ -80,10 +63,7 @@ jobs:
                 a.click()
                 document.body.removeChild(a)
                 window.URL.revokeObjectURL(url)
-
-                if (onGenerate) {
-                  onGenerate(url)
-                }
+                if (onGenerate) onGenerate(url)
               } catch (error) {
                 console.error('Error generating PDF:', error)
                 alert('Failed to generate PDF. Please try again.')
@@ -91,26 +71,201 @@ jobs:
                 setIsGenerating(false)
               }
             }
-
             return (
-              <Button
-                onClick={generatePDF}
-                disabled={isGenerating}
-                variant="outline"
-                className="gap-2"
-              >
-                {isGenerating ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Generating PDF...
-                  </>
-                ) : (
-                  <>
-                    <FileDown className="h-4 w-4" />
-                    Download PDF
-                  </>
-                )}
+              <Button onClick={generatePDF} disabled={isGenerating} variant="outline" className="gap-2">
+                {isGenerating ? (<><Loader2 className="h-4 w-4 animate-spin" />Generating PDF...</>) : (<><FileDown className="h-4 w-4" />Download PDF</>)}
               </Button>
             )
           }
-          EOF
+          ENDFILE
+
+          cat > components/delivery/whatsapp-share.tsx << 'ENDFILE'
+          'use client'
+          import { Button } from '@/components/ui/button'
+          import { MessageCircle } from 'lucide-react'
+          interface WhatsAppShareProps { horoscope: any; phoneNumber?: string }
+          export function WhatsAppShare({ horoscope, phoneNumber }: WhatsAppShareProps) {
+            const formatHoroscopeMessage = (data: any) => {
+              const lines = [`🔮 *Horoscope Report - ${data.name || 'Your Reading'}*`, '', `📅 Date: ${new Date(data.birthDate).toLocaleDateString()}`, `📍 Place: ${data.birthPlace || 'N/A'}`, `⏰ Time: ${data.birthTime || 'N/A'}`, '', '✨ *Key Insights:*']
+              if (data.predictions?.length) data.predictions.slice(0, 3).forEach((p: any, i: number) => lines.push(`${i + 1}. ${p.title || p.text}`))
+              lines.push('', 'Generated from AstroKalki', 'Visit: https://www.astrokalki.com')
+              return lines.join('\n')
+            }
+            const shareOnWhatsApp = () => {
+              const message = formatHoroscopeMessage(horoscope)
+              let url = 'https://wa.me/'
+              if (phoneNumber) url += `${phoneNumber.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`
+              else url += `?text=${encodeURIComponent(message)}`
+              window.open(url, '_blank')
+            }
+            return <Button onClick={shareOnWhatsApp} variant="outline" className="gap-2 bg-green-50 hover:bg-green-100"><MessageCircle className="h-4 w-4" />Share on WhatsApp</Button>
+          }
+          ENDFILE
+
+          cat > components/delivery/email-share.tsx << 'ENDFILE'
+          'use client'
+          import { Button } from '@/components/ui/button'
+          import { Mail } from 'lucide-react'
+          interface EmailShareProps { horoscope: any; recipientEmail?: string }
+          export function EmailShare({ horoscope, recipientEmail }: EmailShareProps) {
+            const formatEmailBody = (data: any) => {
+              const lines = [`Dear ${data.name || 'Friend'},`, '', 'Here is your personalized horoscope report from AstroKalki.', '', 'Birth Details:', `Date: ${new Date(data.birthDate).toLocaleDateString()}`, `Place: ${data.birthPlace || 'N/A'}`, `Time: ${data.birthTime || 'N/A'}`, '', 'Key Insights:']
+              if (data.predictions) data.predictions.forEach((p: any, i: number) => lines.push(`${i + 1}. ${p.title || p.text}`))
+              lines.push('', 'For more insights: https://www.astrokalki.com', '', 'Best regards,', 'AstroKalki Team')
+              return lines.join('\n')
+            }
+            const shareViaEmail = () => {
+              const subject = encodeURIComponent(`Your Horoscope Report - ${horoscope.name || 'AstroKalki'}`)
+              const body = encodeURIComponent(formatEmailBody(horoscope))
+              window.location.href = `mailto:${recipientEmail || ''}?subject=${subject}&body=${body}`
+            }
+            return <Button onClick={shareViaEmail} variant="outline" className="gap-2"><Mail className="h-4 w-4" />Share via Email</Button>
+          }
+          ENDFILE
+
+          cat > components/delivery/download-button.tsx << 'ENDFILE'
+          'use client'
+          import { Button } from '@/components/ui/button'
+          import { Download } from 'lucide-react'
+          interface DownloadButtonProps { data: any; filename?: string; format?: 'json' | 'txt' }
+          export function DownloadButton({ data, filename = 'horoscope', format = 'json' }: DownloadButtonProps) {
+            const formatAsText = (d: any) => ['='.repeat(50), 'HOROSCOPE REPORT', '='.repeat(50), '', `Name: ${d.name || 'N/A'}`, `Birth Date: ${d.birthDate ? new Date(d.birthDate).toLocaleDateString() : 'N/A'}`, `Birth Place: ${d.birthPlace || 'N/A'}`, `Birth Time: ${d.birthTime || 'N/A'}`, '', '='.repeat(50), 'PREDICTIONS', '='.repeat(50), '', ...(d.predictions?.map((p: any, i: number) => [`${i + 1}. ${p.title || 'Prediction'}`, `   ${p.text || p.description || ''}`, ''].join('\n')) || []), '='.repeat(50), 'Generated by AstroKalki', 'https://www.astrokalki.com', '='.repeat(50)].join('\n')
+            const downloadData = () => {
+              const content = format === 'json' ? JSON.stringify(data, null, 2) : formatAsText(data)
+              const blob = new Blob([content], { type: format === 'json' ? 'application/json' : 'text/plain' })
+              const url = window.URL.createObjectURL(blob)
+              const a = document.createElement('a')
+              a.href = url
+              a.download = `${filename}-${new Date().toISOString().split('T')[0]}.${format}`
+              document.body.appendChild(a)
+              a.click()
+              document.body.removeChild(a)
+              window.URL.revokeObjectURL(url)
+            }
+            return <Button onClick={downloadData} variant="outline" className="gap-2"><Download className="h-4 w-4" />Download {format.toUpperCase()}</Button>
+          }
+          ENDFILE
+
+          cat > components/delivery/print-button.tsx << 'ENDFILE'
+          'use client'
+          import { Button } from '@/components/ui/button'
+          import { Printer } from 'lucide-react'
+          interface PrintButtonProps { contentRef?: React.RefObject<HTMLElement> }
+          export function PrintButton({ contentRef }: PrintButtonProps) {
+            const handlePrint = () => {
+              if (contentRef?.current) {
+                const w = window.open('', '', 'width=800,height=600')
+                if (w) {
+                  w.document.write('<html><head><title>Print</title><style>body{font-family:Arial,sans-serif;padding:20px}@media print{body{padding:0}}</style></head><body>')
+                  w.document.write(contentRef.current.innerHTML)
+                  w.document.write('</body></html>')
+                  w.document.close()
+                  w.print()
+                }
+              } else window.print()
+            }
+            return <Button onClick={handlePrint} variant="outline" className="gap-2"><Printer className="h-4 w-4" />Print</Button>
+          }
+          ENDFILE
+
+          cat > components/delivery/share-button.tsx << 'ENDFILE'
+          'use client'
+          import { useState } from 'react'
+          import { Button } from '@/components/ui/button'
+          import { Share2, Check } from 'lucide-react'
+          interface ShareButtonProps { title?: string; text?: string; url?: string }
+          export function ShareButton({ title = 'AstroKalki Horoscope', text = 'Check out my horoscope!', url }: ShareButtonProps) {
+            const [shared, setShared] = useState(false)
+            const handleShare = async () => {
+              const data = { title, text, url: url || window.location.href }
+              try {
+                if (navigator.share) await navigator.share(data)
+                else await navigator.clipboard.writeText(data.url)
+                setShared(true)
+                setTimeout(() => setShared(false), 2000)
+              } catch (e) { console.error(e) }
+            }
+            return <Button onClick={handleShare} variant="outline" className="gap-2">{shared ? (<><Check className="h-4 w-4" />{navigator.share ? 'Shared!' : 'Link Copied!'}</>) : (<><Share2 className="h-4 w-4" />Share</>)}</Button>
+          }
+          ENDFILE
+      
+      - name: Create PDF API route
+        run: |
+          cat > app/api/generate-pdf/route.ts << 'ENDFILE'
+          import { NextRequest, NextResponse } from 'next/server'
+          export async function POST(req: NextRequest) {
+            try {
+              const { horoscope } = await req.json()
+              if (!horoscope) return NextResponse.json({ error: 'Horoscope data required' }, { status: 400 })
+              const { jsPDF } = await import('jspdf')
+              const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
+              doc.setFont('helvetica')
+              doc.setFillColor(33, 128, 141)
+              doc.rect(0, 0, 210, 40, 'F')
+              doc.setTextColor(255, 255, 255)
+              doc.setFontSize(24)
+              doc.text('AstroKalki', 105, 20, { align: 'center' })
+              doc.setFontSize(14)
+              doc.text('Horoscope Report', 105, 30, { align: 'center' })
+              doc.setTextColor(0, 0, 0)
+              let y = 55
+              doc.setFontSize(16)
+              doc.setFont('helvetica', 'bold')
+              doc.text('Personal Details', 20, y)
+              y += 10
+              doc.setFontSize(11)
+              doc.setFont('helvetica', 'normal')
+              const details = [`Name: ${horoscope.name || 'N/A'}`, `Birth Date: ${horoscope.birthDate ? new Date(horoscope.birthDate).toLocaleDateString('en-IN') : 'N/A'}`, `Birth Time: ${horoscope.birthTime || 'N/A'}`, `Birth Place: ${horoscope.birthPlace || 'N/A'}`]
+              details.forEach(d => { doc.text(d, 20, y); y += 7 })
+              y += 10
+              doc.setFontSize(16)
+              doc.setFont('helvetica', 'bold')
+              doc.text('Astrological Insights', 20, y)
+              y += 10
+              doc.setFontSize(11)
+              doc.setFont('helvetica', 'normal')
+              if (horoscope.predictions) {
+                horoscope.predictions.forEach((p: any, i: number) => {
+                  if (y > 270) { doc.addPage(); y = 20 }
+                  doc.setFont('helvetica', 'bold')
+                  doc.text(`${i + 1}. ${p.title || 'Prediction'}`, 20, y)
+                  y += 7
+                  doc.setFont('helvetica', 'normal')
+                  const text = p.text || p.description || 'No details'
+                  doc.splitTextToSize(text, 170).forEach((line: string) => {
+                    if (y > 270) { doc.addPage(); y = 20 }
+                    doc.text(line, 25, y)
+                    y += 6
+                  })
+                  y += 5
+                })
+              }
+              const pages = doc.getNumberOfPages()
+              for (let i = 1; i <= pages; i++) {
+                doc.setPage(i)
+                doc.setFontSize(8)
+                doc.setTextColor(128, 128, 128)
+                doc.text('Generated by AstroKalki - www.astrokalki.com', 105, 287, { align: 'center' })
+                doc.text(`Page ${i} of ${pages}`, 105, 292, { align: 'center' })
+              }
+              const buffer = doc.output('arraybuffer')
+              return new NextResponse(buffer, {
+                headers: {
+                  'Content-Type': 'application/pdf',
+                  'Content-Disposition': `attachment; filename="horoscope-${horoscope.name || 'report'}-${new Date().toISOString().split('T')[0]}.pdf"`
+                }
+              })
+            } catch (error) {
+              console.error('PDF generation error:', error)
+              return NextResponse.json({ error: 'Failed to generate PDF' }, { status: 500 })
+            }
+          }
+          ENDFILE
+      
+      - name: Update package.json
+        run: |
+          node -e "const fs=require('fs');const p=JSON.parse(fs.readFileSync('package.json','utf8'));p.dependencies=p.dependencies||{};p.dependencies['jspdf']='^2.5.2';fs.writeFileSync('package.json',JSON.stringify(p,null,2));"
+      
+      - name: Install dependencies
+        run: pnpm install
+      
