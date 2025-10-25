@@ -1,8 +1,8 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { GlassCard } from "@/components/glass-card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,6 +11,7 @@ import { Download, Sparkles } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 export function LeadMagnet() {
+  const router = useRouter()
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
   const [loading, setLoading] = useState(false)
@@ -21,23 +22,32 @@ export function LeadMagnet() {
     setLoading(true)
 
     try {
-      await fetch("/api/lead-magnet", {
+      const response = await fetch("https://api.astrokalki.com/lead-magnet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email }),
       })
+
+      if (response.ok) {
+        // Redirect to thank you page on successful submission
+        router.push("/thank-you")
+      } else {
+        toast({
+          title: "Error",
+          description: "Something went wrong. Please try again.",
+          variant: "destructive",
+        })
+        setLoading(false)
+      }
     } catch (error) {
       console.error("[v0] Lead magnet submission error:", error)
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      })
+      setLoading(false)
     }
-
-    toast({
-      title: "Success!",
-      description: "Check your email for your free birth chart guide",
-    })
-
-    setEmail("")
-    setName("")
-    setLoading(false)
   }
 
   return (
@@ -51,7 +61,6 @@ export function LeadMagnet() {
           Unlock the secrets of your cosmic blueprint with our comprehensive 20-page guide
         </p>
       </div>
-
       <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
         <div>
           <Label htmlFor="name">Your Name</Label>
@@ -65,7 +74,6 @@ export function LeadMagnet() {
             className="mt-1"
           />
         </div>
-
         <div>
           <Label htmlFor="email">Email Address</Label>
           <Input
@@ -78,7 +86,6 @@ export function LeadMagnet() {
             className="mt-1"
           />
         </div>
-
         <Button
           type="submit"
           disabled={loading}
@@ -93,8 +100,9 @@ export function LeadMagnet() {
             </>
           )}
         </Button>
-
-        <p className="text-xs text-center text-muted-foreground">We respect your privacy. Unsubscribe at any time.</p>
+        <p className="text-xs text-center text-muted-foreground">
+          We respect your privacy. Unsubscribe at any time.
+        </p>
       </form>
     </GlassCard>
   )
