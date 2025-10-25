@@ -61,22 +61,6 @@ Provide a JSON response with this EXACT structure:
 }
 
 Ensure all fields are filled with detailed, actionable cosmic timing guidance. The fullText should be extensive and focused on WHEN to take actions together based on planetary cycles.`
-
-    const result = await model.generateContent(prompt)
-    const text = (await result.response).text()
-
-    // Extract JSON from response
-    const jsonMatch = text.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) {
-      return NextResponse.json(
-        { error: 'Invalid response format from AI' },
-        { status: 500 }
-      )
-    }
-
-    const data = JSON.parse(jsonMatch[0])
-    return NextResponse.json(data)
-
   } catch (error) {
     console.error('Destiny Sync API Error:', error)
     return NextResponse.json(
