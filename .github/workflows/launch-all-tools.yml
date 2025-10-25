@@ -14,7 +14,6 @@ jobs:
       - name: Copy and customize for Destiny Sync
         run: |
           mkdir -p app/tools/destiny-sync
-          mkdir -p app/api/gemini/destiny-sync
           cp app/tools/relationship-compass/page.tsx app/tools/destiny-sync/page.tsx
           sed -i 's/Relationship Compass/Destiny Sync Report/g' app/tools/destiny-sync/page.tsx
           sed -i 's/relationship-compass/destiny-sync/g' app/tools/destiny-sync/page.tsx
@@ -26,7 +25,6 @@ jobs:
       - name: Copy and customize for Karmic Debt Decoder
         run: |
           mkdir -p app/tools/karmic-debt
-          mkdir -p app/api/gemini/karmic-debt
           cp app/tools/relationship-compass/page.tsx app/tools/karmic-debt/page.tsx
           sed -i 's/Relationship Compass/Karmic Debt Decoder/g' app/tools/karmic-debt/page.tsx
           sed -i 's/relationship-compass/karmic-debt/g' app/tools/karmic-debt/page.tsx
@@ -38,7 +36,6 @@ jobs:
       - name: Copy and customize for Family Karma Tree
         run: |
           mkdir -p app/tools/family-karma
-          mkdir -p app/api/gemini/family-karma
           cp app/tools/relationship-compass/page.tsx app/tools/family-karma/page.tsx
           sed -i 's/Relationship Compass/Family Karma Tree/g' app/tools/family-karma/page.tsx
           sed -i 's/relationship-compass/family-karma/g' app/tools/family-karma/page.tsx
@@ -50,7 +47,6 @@ jobs:
       - name: Copy and customize for Timeline Healing
         run: |
           mkdir -p app/tools/timeline-healing
-          mkdir -p app/api/gemini/timeline-healing
           cp app/tools/relationship-compass/page.tsx app/tools/timeline-healing/page.tsx
           sed -i 's/Relationship Compass/Timeline Healing/g' app/tools/timeline-healing/page.tsx
           sed -i 's/relationship-compass/timeline-healing/g' app/tools/timeline-healing/page.tsx
