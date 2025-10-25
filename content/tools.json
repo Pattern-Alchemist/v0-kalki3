@@ -14,7 +14,7 @@
       ]
     },
     {
-      "id": "karmic-debt-decoder",
+      "id": "karmic-debt",
       "name": "Karmic Debt Decoder",
       "description": "Decode and understand your karmic debts to break free from past patterns.",
       "icon": "🔮",
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "id": "family-karma-tree",
+      "id": "family-karma",
       "name": "Family Karma Tree",
       "description": "Explore generational karma patterns and heal ancestral wounds.",
       "icon": "🌳",
