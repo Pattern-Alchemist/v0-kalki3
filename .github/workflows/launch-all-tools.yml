@@ -1,23 +1,20 @@
 name: Launch All AstroKalki Premium Tools
-
 on:
   workflow_dispatch:
-
 jobs:
   launch-all-tools:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-
       - name: Copy and customize for Destiny Sync
         run: |
+          mkdir -p app/tools/destiny-sync
+          mkdir -p app/api/gemini/destiny-sync
           cp app/tools/relationship-compass/page.tsx app/tools/destiny-sync/page.tsx
           sed -i 's/Relationship Compass/Destiny Sync Report/g' app/tools/destiny-sync/page.tsx
           sed -i 's/relationship-compass/destiny-sync/g' app/tools/destiny-sync/page.tsx
@@ -26,9 +23,10 @@ jobs:
           sed -i 's/relationship-compass/destiny-sync/g' app/api/gemini/destiny-sync/route.ts
           sed -i 's/compatibility/Destiny Sync cycle/g' app/api/gemini/destiny-sync/route.ts
           sed -i '/prompt =/c\    const prompt = `You are a renowned Vedic astrologer. Give an in-depth Destiny Sync report for Name: $${name} DOB: $${dob}. Return this JSON ONLY: { "destinyTheme": "...", "cycleSummary": "...", "highlights": ["..."], "7steps": ["..."], "fullText": "..." }`' app/api/gemini/destiny-sync/route.ts
-
       - name: Copy and customize for Karmic Debt Decoder
         run: |
+          mkdir -p app/tools/karmic-debt
+          mkdir -p app/api/gemini/karmic-debt
           cp app/tools/relationship-compass/page.tsx app/tools/karmic-debt/page.tsx
           sed -i 's/Relationship Compass/Karmic Debt Decoder/g' app/tools/karmic-debt/page.tsx
           sed -i 's/relationship-compass/karmic-debt/g' app/tools/karmic-debt/page.tsx
@@ -37,9 +35,10 @@ jobs:
           sed -i 's/relationship-compass/karmic-debt/g' app/api/gemini/karmic-debt/route.ts
           sed -i 's/compatibility/Karmic Debt Analysis/g' app/api/gemini/karmic-debt/route.ts
           sed -i '/prompt =/c\    const prompt = `You are a past-life karma AI. Give a Karmic Debt Decoder reading for Name: $${name} DOB: $${dob}. Return this JSON ONLY: { "karmicDebts": ["..."], "summary": "...", "remedies": ["..."], "fullText": "..." }`' app/api/gemini/karmic-debt/route.ts
-
       - name: Copy and customize for Family Karma Tree
         run: |
+          mkdir -p app/tools/family-karma
+          mkdir -p app/api/gemini/family-karma
           cp app/tools/relationship-compass/page.tsx app/tools/family-karma/page.tsx
           sed -i 's/Relationship Compass/Family Karma Tree/g' app/tools/family-karma/page.tsx
           sed -i 's/relationship-compass/family-karma/g' app/tools/family-karma/page.tsx
@@ -48,9 +47,10 @@ jobs:
           sed -i 's/relationship-compass/family-karma/g' app/api/gemini/family-karma/route.ts
           sed -i 's/compatibility/Family Karma Tree/g' app/api/gemini/family-karma/route.ts
           sed -i '/prompt =/c\    const prompt = `You are a Vedic family karma AI. Give an ancestral karma tree for Name: $${name} DOB: $${dob}. Return this JSON ONLY: { "ancestralRoots": ["..."], "challenges": ["..."], "healingSteps": ["..."], "fullText": "..." }`' app/api/gemini/family-karma/route.ts
-
       - name: Copy and customize for Timeline Healing
         run: |
+          mkdir -p app/tools/timeline-healing
+          mkdir -p app/api/gemini/timeline-healing
           cp app/tools/relationship-compass/page.tsx app/tools/timeline-healing/page.tsx
           sed -i 's/Relationship Compass/Timeline Healing/g' app/tools/timeline-healing/page.tsx
           sed -i 's/relationship-compass/timeline-healing/g' app/tools/timeline-healing/page.tsx
@@ -59,11 +59,9 @@ jobs:
           sed -i 's/relationship-compass/timeline-healing/g' app/api/gemini/timeline-healing/route.ts
           sed -i 's/compatibility/Timeline Healing Journey/g' app/api/gemini/timeline-healing/route.ts
           sed -i '/prompt =/c\    const prompt = `You are a timeline healing AI. Give a block-by-block life healing journey for Name: $${name} DOB: $${dob}. Return this JSON ONLY: { "timelineBlocks": ["..."], "summary": "...", "actionSteps": ["..."], "fullText": "..." }`' app/api/gemini/timeline-healing/route.ts
-
       - name: Add all tools to index (manual step, reminder only)
         run: |
           echo "Please manually update your /tools page with links to: Destiny Sync, Karmic Debt Decoder, Family Karma Tree, Timeline Healing."
-
       - name: Commit and push all
         run: |
           git config user.name "github-actions[bot]"
@@ -71,7 +69,6 @@ jobs:
           git add app/tools app/api/gemini
           git commit -m "feat: launch all premium apps via GitHub Action"
           git push
-
       - name: Install dependencies and build (for Vercel autodeploy)
         run: |
           npm install
