@@ -1,0 +1,56 @@
+{
+  "tools": [
+    {
+      "id": "destiny-sync",
+      "name": "Destiny Sync",
+      "description": "Align your life with your destined path through cosmic synchronization.",
+      "icon": "✨",
+      "category": "Premium",
+      "features": [
+        "Cosmic alignment analysis",
+        "Destiny path mapping",
+        "Synchronicity tracking",
+        "Life purpose insights"
+      ]
+    },
+    {
+      "id": "karmic-debt-decoder",
+      "name": "Karmic Debt Decoder",
+      "description": "Decode and understand your karmic debts to break free from past patterns.",
+      "icon": "🔮",
+      "category": "Premium",
+      "features": [
+        "Karmic debt identification",
+        "Past life pattern recognition",
+        "Debt resolution guidance",
+        "Karmic balance tracking"
+      ]
+    },
+    {
+      "id": "family-karma-tree",
+      "name": "Family Karma Tree",
+      "description": "Explore generational karma patterns and heal ancestral wounds.",
+      "icon": "🌳",
+      "category": "Premium",
+      "features": [
+        "Ancestral pattern mapping",
+        "Family karma analysis",
+        "Generational healing insights",
+        "Lineage transformation tools"
+      ]
+    },
+    {
+      "id": "timeline-healing",
+      "name": "Timeline Healing",
+      "description": "Heal past traumas and rewrite your timeline for a better future.",
+      "icon": "⏳",
+      "category": "Premium",
+      "features": [
+        "Timeline visualization",
+        "Trauma point identification",
+        "Timeline rewriting techniques",
+        "Future path optimization"
+      ]
+    }
+  ]
+}
