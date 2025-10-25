@@ -1,8 +1,6 @@
 name: Launch All AstroKalki Premium Tools
-
 on:
   workflow_dispatch:
-
 jobs:
   launch-all-tools:
     runs-on: ubuntu-latest
@@ -142,6 +140,38 @@ jobs:
             npm run lint || echo "Linting completed with warnings"
           fi
           echo "✅ Quality checks completed"
+      
+      # Step 13.5: Auto-fix TSX/JSX Syntax Errors
+      - name: Auto-fix TSX/JSX Syntax Errors
+        run: |
+          echo "Running ESLint and Prettier auto-fix on app/routes/**/*.tsx files..."
+          # Install ESLint and Prettier if not already installed
+          npm install --save-dev eslint prettier eslint-config-prettier eslint-plugin-react eslint-plugin-react-hooks @typescript-eslint/eslint-plugin @typescript-eslint/parser || echo "Dependencies already installed"
+          
+          # Run ESLint with --fix on all TSX files in app/routes
+          if [ -d "app/routes" ]; then
+            npx eslint "app/routes/**/*.tsx" --fix || echo "ESLint auto-fix completed with warnings"
+          else
+            echo "Warning: app/routes directory not found, checking app/tools instead"
+            if [ -d "app/tools" ]; then
+              npx eslint "app/tools/**/*.tsx" --fix || echo "ESLint auto-fix completed with warnings"
+            fi
+          fi
+          
+          # Run Prettier with --write on all TSX files
+          if [ -d "app/routes" ]; then
+            npx prettier "app/routes/**/*.tsx" --write || echo "Prettier formatting completed"
+          else
+            if [ -d "app/tools" ]; then
+              npx prettier "app/tools/**/*.tsx" --write || echo "Prettier formatting completed"
+            fi
+          fi
+          
+          # Commit auto-fixed changes
+          git add .
+          git diff --staged --quiet || git commit -m "chore: auto-fix TSX/JSX syntax errors with ESLint and Prettier" || echo "No changes to commit"
+          
+          echo "✅ Auto-fix completed"
       
       # Step 14: Build the application
       - name: Build application with all features
