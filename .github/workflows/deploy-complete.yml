@@ -1,0 +1,116 @@
+name: Complete Setup and Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install pnpm
+        run: npm install -g pnpm
+      
+      - name: Create components directory
+        run: |
+          mkdir -p components/delivery
+          mkdir -p app/api/generate-pdf
+      
+      - name: Create delivery components index
+        run: |
+          cat > components/delivery/index.tsx << 'EOF'
+          export { PDFGenerator } from './pdf-generator'
+          export { WhatsAppShare } from './whatsapp-share'
+          export { EmailShare } from './email-share'
+          export { DownloadButton } from './download-button'
+          export { PrintButton } from './print-button'
+          export { ShareButton } from './share-button'
+          EOF
+      
+      - name: Create PDF Generator component
+        run: |
+          cat > components/delivery/pdf-generator.tsx << 'EOF'
+          'use client'
+
+          import { useState } from 'react'
+          import { Button } from '@/components/ui/button'
+          import { FileDown, Loader2 } from 'lucide-react'
+
+          interface PDFGeneratorProps {
+            horoscope: any
+            onGenerate?: (pdfUrl: string) => void
+          }
+
+          export function PDFGenerator({ horoscope, onGenerate }: PDFGeneratorProps) {
+            const [isGenerating, setIsGenerating] = useState(false)
+
+            const generatePDF = async () => {
+              setIsGenerating(true)
+              
+              try {
+                const response = await fetch('/api/generate-pdf', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ horoscope }),
+                })
+
+                if (!response.ok) {
+                  throw new Error('Failed to generate PDF')
+                }
+
+                const blob = await response.blob()
+                const url = window.URL.createObjectURL(blob)
+                
+                const a = document.createElement('a')
+                a.href = url
+                a.download = `horoscope-${horoscope.name || 'report'}-${new Date().toISOString().split('T')[0]}.pdf`
+                document.body.appendChild(a)
+                a.click()
+                document.body.removeChild(a)
+                window.URL.revokeObjectURL(url)
+
+                if (onGenerate) {
+                  onGenerate(url)
+                }
+              } catch (error) {
+                console.error('Error generating PDF:', error)
+                alert('Failed to generate PDF. Please try again.')
+              } finally {
+                setIsGenerating(false)
+              }
+            }
+
+            return (
+              <Button
+                onClick={generatePDF}
+                disabled={isGenerating}
+                variant="outline"
+                className="gap-2"
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Generating PDF...
+                  </>
+                ) : (
+                  <>
+                    <FileDown className="h-4 w-4" />
+                    Download PDF
+                  </>
+                )}
+              </Button>
+            )
+          }
+          EOF
