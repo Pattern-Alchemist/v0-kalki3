@@ -6,6 +6,7 @@ const genAI = new GoogleGenerativeAI('AIzaSyC72H5VR4GXx7g4URpJu9LT0N9pp_IjVxg')
 export async function POST(request: Request) {
   try {
     const { person1, person2 } = await request.json()
+
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' })
 
     const prompt = `You are a Vedic astrology expert specializing in TIMELINE HEALING, TRAUMA BLOCKS, and RELATIONSHIP EVOLUTION.
@@ -45,11 +46,6 @@ Provide a JSON response with this EXACT structure:
 }
 
 Ensure all fields are filled with detailed, actionable timeline healing insights and practical steps. The fullText should be extensive and focused on WHAT blocks exist, WHY they formed, and HOW to heal them through specific therapeutic and spiritual practices.`
-
-    const result = await model.generateContent(prompt)
-    const text = (await result.response).text()
-    const jsonMatch = text.match(/\{[\s\S]*\}/)
-    return NextResponse.json(jsonMatch ? JSON.parse(jsonMatch[0]) : { error: 'Invalid response format' })
   } catch (error) {
     console.error('Timeline Healing API Error:', error)
     return NextResponse.json({ error: 'Failed to generate timeline healing analysis' }, { status: 500 })
